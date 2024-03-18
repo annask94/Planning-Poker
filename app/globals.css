@@ -13,7 +13,9 @@
 :root {
   --color-header-footer: rgb(52, 152, 219);
   --btn-bg-color: rgb(230, 126, 34);
+  --card-hover-light-orange: rgb(255, 246, 238);
   --text-color: rgb(18, 53, 77);
+  --text-area-light-blue: rgb(217, 240, 255);
 }
 
 body {
@@ -34,4 +36,30 @@ body {
 
 .btn_component {
   background-color: var(--btn-bg-color);
+}
+
+.card_button {
+  height: 110px;
+  width: 70px;
+  padding: clamp(1rem, 2vw, 2rem) clamp(0.5rem, 1vw, 1.5rem);
+  font-size: clamp(1.5rem, 2vw, 3rem);
+  color: var(--color-header-footer);
+  border: solid 2px var(--color-header-footer);
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.card_button:hover,
+.card_button.card_picked {
+  transform: translateY(-30px);
+}
+
+.card_picked {
+  background-color: var(--card-hover-light-orange);
+  color: var(--btn-bg-color);
+  border: solid 2px var(--btn-bg-color);
+}
+
+.task_description:focus {
+  border: solid 2px var(--color-header-footer);
 }

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CustomBtn from "./CusctomBtn";
+import CustomBtn from "./CustomBtn";
 import Link from "next/link";
 
 const Hero = () => {
