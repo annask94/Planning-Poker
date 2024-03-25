@@ -37,7 +37,7 @@ function Card({ id, figure, onClick, picked }: CardProps) {
 
 interface CardSetProps {
   onCardSelect: (card: CardData) => void;
-  selectedCard: CardData | null; // Add this line
+  selectedCard: CardData | null;
 }
 
 function CardSet({ onCardSelect, selectedCard }: CardSetProps) {
