@@ -15,7 +15,7 @@ const Hero = () => {
         </p>
         <Link
           href="
-        ./secondPage"
+        ./estimate"
         >
           <CustomBtn text="Start" />
         </Link>

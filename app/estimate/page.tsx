@@ -4,10 +4,8 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="hero flex flex-col min-h-screen justify-between">
-      <Header />
+    <main>
       <MainPick />
-      <Footer />
     </main>
   );
 }

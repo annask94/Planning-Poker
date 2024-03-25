@@ -1,6 +1,6 @@
 interface CustomBtnProps {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const CustomBtn = ({ text, onClick }: CustomBtnProps) => {
