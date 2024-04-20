@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useCompletion } from "ai/react";
 import CardSet, { CardData } from "./CardSets";
 import CustomBtn from "./CustomBtn";
 
@@ -40,21 +41,12 @@ function Popup({
 
 export default function MainPick() {
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
-  const [taskDescription, setTaskDescription] = useState("");
-  const [aiEstimate, setAiEstimate] = useState("");
-  const [aiExplanation, setAiExplanation] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const response = await fetch(
-      `/api/completion?prompt=${encodeURIComponent(taskDescription)}`
-    );
-    const data = await response.json();
-    setAiEstimate(data.aiEstimate);
-    setAiExplanation(data.aiExplanation);
-    setShowPopup(true);
-  };
+  const { completion, input, isLoading, handleSubmit, handleInputChange } =
+    useCompletion({
+      api: "/api/completion",
+    });
 
   return (
     <form
@@ -69,8 +61,8 @@ export default function MainPick() {
         name="taskDescription"
         rows={5}
         cols={50}
-        value={taskDescription}
-        onChange={(e) => setTaskDescription(e.target.value)}
+        value={input}
+        onChange={handleInputChange}
         className="task_description rounded-md border-2 border-gray-300 outline-none"
       />
       <h2 className="text-xl md:text-4xl">Pick a card</h2>
@@ -81,15 +73,16 @@ export default function MainPick() {
       >
         Estimate
       </button>
-      {showPopup && (
+      {/* {showPopup && (
         <Popup
           card={selectedCard!}
-          cardAI={aiEstimate}
-          showDetails={() => alert(aiExplanation)}
+          cardAI={completion.result} // Assuming `completion.result` holds the AI's estimate
+          showDetails={() => alert(completion.result)} // Modify as necessary
           onClose={() => setShowPopup(false)}
-          aiExplanation={aiExplanation}
+          aiExplanation={completion.explanation} // Assuming this structure; adjust based on actual API response
         />
-      )}
+      )} */}
+      <p>{completion}</p>
     </form>
   );
 }
