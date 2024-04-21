@@ -1,7 +1,5 @@
-"use client";
-
 import React, { useState } from "react";
-import { useCompletion } from "ai/react";
+import OpenAI from "openai";
 import CardSet, { CardData } from "./CardSets";
 import CustomBtn from "./CustomBtn";
 
@@ -39,50 +37,56 @@ function Popup({
   );
 }
 
-export default function MainPick() {
-  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
-  const [showPopup, setShowPopup] = useState(false);
+export default async function MainPick() {
+  const handlePrompt = async (formData: FormData) => {
+    "use server";
 
-  const { completion, input, isLoading, handleSubmit, handleInputChange } =
-    useCompletion({
-      api: "/api/completion",
+    const prompt = formData.get("prompt");
+    console.log(prompt);
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_KEY,
     });
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      max_tokens: 150,
+      temperature: 0.5,
+      stream: false,
+      messages: [
+        {
+          role: "user",
+          content: `Based on the provided task description '${prompt}', please estimate the effort required using the Scrum poker technique. Consider factors such as the complexity of implementation, dependencies, and potential risks. Return an estimate as a JSON in a structured format: { "aiEstimate": "5", "aiDescription": "Detailed explanation here..." }`,
+        },
+      ],
+    });
+
+    console.log(completion.choices[0].message.content);
+  };
 
   return (
     <form
       className="flex flex-col gap-8 justify-center items-center"
-      onSubmit={handleSubmit}
+      action={handlePrompt}
     >
       <label htmlFor="taskDescription" className="text-xl md:text-4xl">
         Describe the task
       </label>
       <textarea
         id="taskDescription"
-        name="taskDescription"
+        name="prompt"
         rows={5}
         cols={50}
-        value={input}
-        onChange={handleInputChange}
         className="task_description rounded-md border-2 border-gray-300 outline-none"
       />
       <h2 className="text-xl md:text-4xl">Pick a card</h2>
-      <CardSet onCardSelect={setSelectedCard} selectedCard={selectedCard} />
+      {/* <CardSet onCardSelect={setSelectedCard} selectedCard={selectedCard} /> */}
       <button
         type="submit"
         className="btn_component text-xl md:text-2xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70"
       >
         Estimate
       </button>
-      {/* {showPopup && (
-        <Popup
-          card={selectedCard!}
-          cardAI={completion.result} // Assuming `completion.result` holds the AI's estimate
-          showDetails={() => alert(completion.result)} // Modify as necessary
-          onClose={() => setShowPopup(false)}
-          aiExplanation={completion.explanation} // Assuming this structure; adjust based on actual API response
-        />
-      )} */}
-      <p>{completion}</p>
+      <p></p>
     </form>
   );
 }

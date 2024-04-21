@@ -9,23 +9,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", ["POST"]);
-    res.status(405).end("Method Not Allowed");
+  const prompt = (req.query.prompt as string) || (req.body.prompt as string);
+
+  if (!prompt) {
+    res.status(400).json({ error: "Prompt is required in the request body." });
     return;
   }
-
   try {
-    // Extract the `prompt` from the body of the request
-    const { prompt } = await req.body;
-
-    if (!prompt) {
-      res
-        .status(400)
-        .json({ error: "Prompt is required in the request body." });
-      return;
-    }
-
     const completion = await openai.completions.create;
     ({
       model: "gpt-3.5-turbo",
@@ -36,10 +26,16 @@ export default async function handler(
 
     const parsedResponse = JSON.parse(completion.choices[0].text);
 
-    res.status(200).json({
-      aiEstimate: parsedResponse.aiEstimate,
-      aiDescription: parsedResponse.aiDescription,
-    });
+    if (completion.choices.length > 0) {
+      const firstChoice = completion.choices[0];
+      const parsedResponse = JSON.parse(firstChoice.text); // Assuming the response is JSON-formatted string
+      res.status(200).json({
+        aiEstimate: parsedResponse.aiEstimate,
+        aiDescription: parsedResponse.aiDescription,
+      });
+    } else {
+      res.status(404).json({ error: "No completion found." });
+    }
   } catch (error) {
     console.error("Error in AI response:", error);
     res.status(500).json({ error: "Failed to process the AI response" });
