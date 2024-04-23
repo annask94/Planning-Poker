@@ -42,7 +42,10 @@ export default async function MainPick() {
     "use server";
 
     const prompt = formData.get("prompt");
+    const pickedCard = formData.get("cardSelection");
     console.log(prompt);
+    console.log(pickedCard);
+
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_KEY,
     });
@@ -79,7 +82,7 @@ export default async function MainPick() {
         className="task_description rounded-md border-2 border-gray-300 outline-none"
       />
       <h2 className="text-xl md:text-4xl">Pick a card</h2>
-      {/* <CardSet onCardSelect={setSelectedCard} selectedCard={selectedCard} /> */}
+      <CardSet />
       <button
         type="submit"
         className="btn_component text-xl md:text-2xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70"

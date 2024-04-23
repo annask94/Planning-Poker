@@ -1,4 +1,6 @@
 "use client";
+import React, { useState } from "react";
+
 const cardSetOne = [
   { id: "c1", figure: 0 },
   { id: "c2", figure: 1 },
@@ -13,50 +15,55 @@ const cardSetOne = [
   { id: "c11", figure: 89 },
   { id: "c12", figure: "?" },
 ];
+
 export interface CardData {
   id: string;
   figure: number | string;
 }
 
-interface CardProps extends CardData {
-  onClick: () => void;
-  picked: boolean;
-}
-function Card({ id, figure, onClick, picked }: CardProps) {
-  return (
-    <button
-      className={`card_button font-bold ${picked ? "card_picked" : ""}`}
-      type="button"
-      id={id}
-      onClick={onClick}
-    >
-      {figure}
-    </button>
-  );
+interface CardProps {
+  card: CardData;
+  onChange: (card: CardData) => void;
+  checked: boolean;
 }
 
-interface CardSetProps {
-  onCardSelect: (card: CardData) => void;
-  selectedCard: CardData | null;
-}
+const Card: React.FC<CardProps> = ({ card, onChange, checked }) => (
+  <label
+    className={`card_button font-bold ${checked ? "card_picked" : ""}`}
+    htmlFor={card.id}
+  >
+    <input
+      type="radio"
+      name="cardSelection"
+      id={card.id}
+      value={card.figure.toString()}
+      checked={checked}
+      onChange={() => onChange(card)}
+      style={{ display: "none" }}
+    />
+    {card.figure}
+  </label>
+);
 
-function CardSet({ onCardSelect, selectedCard }: CardSetProps) {
-  const handleCardClick = (card: CardData) => {
-    onCardSelect(card);
+const CardSet: React.FC = () => {
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+
+  const handleCardSelect = (card: CardData) => {
+    setSelectedCard(card);
   };
+
   return (
-    <div className="flex gap-4 justify-center items-center flex-wrap">
+    <fieldset className="flex gap-4 justify-center items-center flex-wrap">
       {cardSetOne.map((card) => (
         <Card
           key={card.id}
-          id={card.id}
-          figure={card.figure}
-          onClick={() => handleCardClick(card)}
-          picked={selectedCard?.id === card.id}
+          card={card}
+          onChange={handleCardSelect}
+          checked={selectedCard?.id === card.id}
         />
       ))}
-    </div>
+    </fieldset>
   );
-}
+};
 
 export default CardSet;
