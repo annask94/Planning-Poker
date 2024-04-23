@@ -27,7 +27,7 @@ interface CardProps {
   checked: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ card, onChange, checked }) => (
+const Card = ({ card, onChange, checked }: CardProps) => (
   <label
     className={`card_button font-bold ${checked ? "card_picked" : ""}`}
     htmlFor={card.id}

@@ -1,7 +1,6 @@
-import React, { useState } from "react";
 import OpenAI from "openai";
+import Link from "next/link";
 import CardSet, { CardData } from "./CardSets";
-import CustomBtn from "./CustomBtn";
 
 interface PopupProps {
   card: CardData;
@@ -83,12 +82,14 @@ export default async function MainPick() {
       />
       <h2 className="text-xl md:text-4xl">Pick a card</h2>
       <CardSet />
-      <button
-        type="submit"
-        className="btn_component text-xl md:text-2xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70"
-      >
-        Estimate
-      </button>
+      <Link href="./result">
+        <button
+          type="submit"
+          className="btn_component text-xl md:text-2xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70"
+        >
+          Estimate
+        </button>
+      </Link>
       <p></p>
     </form>
   );
