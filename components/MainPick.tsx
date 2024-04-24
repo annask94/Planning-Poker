@@ -62,7 +62,13 @@ export default async function MainPick() {
       ],
     });
 
-    console.log(completion.choices[0].message.content);
+    if (completion.choices[0].message.content) {
+      const aiResponseData = JSON.parse(completion.choices[0].message.content);
+      console.log("AI Estimate:", aiResponseData.aiEstimate);
+      console.log("AI Description:", aiResponseData.aiDescription);
+    } else {
+      console.log("No content available to parse");
+    }
   };
 
   return (
@@ -82,14 +88,13 @@ export default async function MainPick() {
       />
       <h2 className="text-xl md:text-4xl">Pick a card</h2>
       <CardSet />
-      <Link href="./result">
-        <button
-          type="submit"
-          className="btn_component text-xl md:text-2xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70"
-        >
-          Estimate
-        </button>
-      </Link>
+      <button
+        type="submit"
+        className="btn_component text-xl md:text-2xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70"
+      >
+        Estimate
+      </button>
+      <Link href="./result"></Link>
       <p></p>
     </form>
   );
