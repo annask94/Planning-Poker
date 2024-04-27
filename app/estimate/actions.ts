@@ -27,14 +27,12 @@ export async function handlePrompt(formData: FormData) {
     ],
   });
 
-  if (completion.choices[0].message.content) {
+  if (completion.choices.length > 0 && completion.choices[0].message.content) {
     const aiResponseData = JSON.parse(completion.choices[0].message.content);
-    console.log("AI Estimate:", aiResponseData.aiEstimate);
-    console.log("AI Description:", aiResponseData.aiDescription);
-    localStorage.setItem("aiResponse", JSON.stringify(aiResponseData));
+    console.log(aiResponseData);
+    return aiResponseData; // Return this data to be handled on the client-side
   } else {
     console.log("No content available to parse");
+    return null; // Handle this case appropriately in the client
   }
-
-  redirect("@/app/result");
 }
