@@ -1,47 +1,16 @@
 import OpenAI from "openai";
+import { handlePrompt } from "./APIHandle";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import CardSet, { CardData } from "./CardSets";
 
-interface PopupProps {
-  card: CardData;
-  cardAI: string;
-  showDetails: () => void;
-  onClose: () => void;
-  aiExplanation: string;
-}
-
-function Popup({
-  card,
-  cardAI,
-  showDetails,
-  onClose,
-  aiExplanation,
-}: PopupProps) {
-  return (
-    <div className="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50 backdrop-blur-md">
-      <div className="popup bg-white p-5 rounded shadow-lg flex flex-col items-center">
-        <h2 className="text-2xl mb-4">Picked Card</h2>
-        <div className="estimation_description grid grid-cols-2 mb-4 gap-4">
-          <h3 className="text-center">Your choice</h3>
-          <h3 className="text-center">AI estimate</h3>
-          <p className="text-center">{card.figure}</p>
-          <p className="text-center">{cardAI}</p>
-        </div>
-        <button type="button" onClick={showDetails}>
-          Show details
-        </button>
-        <CustomBtn type="button" text="Try again!" onClick={onClose} />
-      </div>
-    </div>
-  );
-}
-
-export default async function MainPick() {
+export default async function MainForm() {
   const handlePrompt = async (formData: FormData) => {
     "use server";
 
     const prompt = formData.get("prompt");
-    const pickedCard = formData.get("cardSelection");
+    const pickedCard = formData.get("cardSelection") || "";
+
     console.log(prompt);
     console.log(pickedCard);
 
@@ -66,6 +35,7 @@ export default async function MainPick() {
       const aiResponseData = JSON.parse(completion.choices[0].message.content);
       console.log("AI Estimate:", aiResponseData.aiEstimate);
       console.log("AI Description:", aiResponseData.aiDescription);
+      localStorage.setItem("aiResponse", JSON.stringify(aiResponseData));
     } else {
       console.log("No content available to parse");
     }
@@ -94,7 +64,7 @@ export default async function MainPick() {
       >
         Estimate
       </button>
-      <Link href="./result"></Link>
+
       <p></p>
     </form>
   );
