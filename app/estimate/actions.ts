@@ -1,14 +1,20 @@
+"use server";
 import OpenAI from "openai";
 import { redirect } from "next/navigation";
 
-export async function handlePrompt(formData: FormData) {
-  "use server";
+type FormState = {
+  userCard: string;
+  aiCard: string;
+  aiDescription: string;
+};
 
+export async function handlePrompt(prevState: FormState, formData: FormData) {
   const prompt = formData.get("prompt");
   const pickedCard = formData.get("cardSelection") || "";
 
   console.log(prompt);
   console.log(pickedCard);
+  console.log(typeof pickedCard);
 
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_KEY,
@@ -30,9 +36,13 @@ export async function handlePrompt(formData: FormData) {
   if (completion.choices.length > 0 && completion.choices[0].message.content) {
     const aiResponseData = JSON.parse(completion.choices[0].message.content);
     console.log(aiResponseData);
-    return aiResponseData; // Return this data to be handled on the client-side
+    return {
+      userCard: JSON.stringify(pickedCard),
+      aiCard: aiResponseData.aiEstimate,
+      aiDescription: aiResponseData.aiDescription,
+    };
   } else {
-    console.log("No content available to parse");
-    return null; // Handle this case appropriately in the client
+    alert("Sorry, something went wrong. Please try again");
+    return null;
   }
 }

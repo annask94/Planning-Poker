@@ -1,11 +1,19 @@
+"use client";
+import { useFormState } from "react-dom";
 import { handlePrompt } from "./actions";
 import CardSet from "@/components/CardSets";
+import SubmitBtn from "@/components/submitBtn";
 
 export default function Home() {
+  const [state, action] = useFormState(handlePrompt, {
+    userCard: "",
+    aiCard: "",
+    aiDescription: "",
+  });
   return (
     <form
       className="flex flex-col gap-8 justify-center items-center"
-      action={handlePrompt}
+      action={action}
     >
       <label htmlFor="taskDescription" className="text-xl md:text-4xl">
         Describe the task
@@ -19,14 +27,10 @@ export default function Home() {
       />
       <h2 className="text-xl md:text-4xl">Pick a card</h2>
       <CardSet />
-      <button
-        type="submit"
-        className="btn_component text-xl md:text-2xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70"
-      >
-        Estimate
-      </button>
-
-      <p></p>
+      <SubmitBtn />
+      <p>{state.userCard}</p>
+      <p>{state?.aiCard}</p>
+      <p>{state?.aiDescription}</p>
     </form>
   );
 }

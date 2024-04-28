@@ -2,17 +2,17 @@
 import React, { useState } from "react";
 
 const cardSetOne = [
-  { id: "c1", figure: 0 },
-  { id: "c2", figure: 1 },
-  { id: "c3", figure: 2 },
-  { id: "c4", figure: 3 },
-  { id: "c5", figure: 5 },
-  { id: "c6", figure: 8 },
-  { id: "c7", figure: 13 },
-  { id: "c8", figure: 21 },
-  { id: "c9", figure: 34 },
-  { id: "c10", figure: 55 },
-  { id: "c11", figure: 89 },
+  { id: "c1", figure: "0" },
+  { id: "c2", figure: "1" },
+  { id: "c3", figure: "2" },
+  { id: "c4", figure: "3" },
+  { id: "c5", figure: "5" },
+  { id: "c6", figure: "8" },
+  { id: "c7", figure: "13" },
+  { id: "c8", figure: "21" },
+  { id: "c9", figure: "34" },
+  { id: "c10", figure: "55" },
+  { id: "c11", figure: "89" },
   { id: "c12", figure: "?" },
 ];
 
