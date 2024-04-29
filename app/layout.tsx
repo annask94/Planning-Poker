@@ -25,12 +25,18 @@ export default function RootLayout({
           </header>
           <main>{children}</main>
           <footer className="header_footer_component p-2">
-            <Image
-              src="\github.svg"
-              height={30}
-              width={30}
-              alt="Github logo"
-            ></Image>
+            <a
+              href="https://github.com/annask94"
+              className="flex justify-center items-center gap-4"
+            >
+              <Image
+                src="\github.svg"
+                height={30}
+                width={30}
+                alt="Github logo"
+              ></Image>
+              <p className="text-white text-sm">Anna Sobieraj-Kmiecik</p>
+            </a>
           </footer>
         </div>
       </body>
