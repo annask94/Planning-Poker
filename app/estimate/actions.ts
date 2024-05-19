@@ -3,11 +3,14 @@ import OpenAI from "openai";
 
 type FormState = {
   userCard: string;
-  aiCard: string;
-  aiDescription: string;
+  aiCard: any;
+  aiDescription: any;
 };
 
-export async function handlePrompt(prevState: FormState, formData: FormData) {
+export async function handlePrompt(
+  state: FormState | null,
+  formData: FormData
+): Promise<FormState | null> {
   const prompt = formData.get("prompt");
   const pickedCard = (formData.get("cardSelection") as string) || "";
 
@@ -45,7 +48,7 @@ export async function handlePrompt(prevState: FormState, formData: FormData) {
       };
     } else {
       console.error("No valid response from AI.");
-      return null; // Consider how to handle errors in your application context
+      return null;
     }
   } catch (error) {
     console.error("Error processing AI completion:", error);
