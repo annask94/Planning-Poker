@@ -35,7 +35,8 @@ export default function Home() {
           name="prompt"
           rows={5}
           cols={50}
-          className="task_description rounded-md border-2 border-gray-300 outline-none"
+          placeholder="Use max 150 words. Be clear and specific, include key details, describe goals and challenges, use actionable language, and provide context if needed..."
+          className="task_description rounded-md border-2 border-gray-300 outline-none p-2"
         />
         <h2 className="text-xl md:text-4xl">Pick a card</h2>
         <CardSet />
