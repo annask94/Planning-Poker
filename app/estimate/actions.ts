@@ -1,10 +1,12 @@
 "use server";
 import OpenAI from "openai";
+import { unknown } from "zod";
 
 type FormState = {
   userCard: string;
   aiCard: any;
   aiDescription: any;
+  message: string;
 };
 
 export async function handlePrompt(
@@ -13,10 +15,6 @@ export async function handlePrompt(
 ): Promise<FormState | null> {
   const prompt = formData.get("prompt");
   const pickedCard = (formData.get("cardSelection") as string) || "";
-
-  console.log(prompt);
-  console.log(pickedCard);
-  console.log(typeof pickedCard);
 
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_KEY,
@@ -45,13 +43,24 @@ export async function handlePrompt(
         userCard: pickedCard,
         aiCard: aiResponseData.aiEstimate,
         aiDescription: aiResponseData.aiDescription,
+        message: "",
       };
     } else {
       console.error("No valid response from AI.");
-      return null;
+      return {
+        userCard: pickedCard,
+        aiCard: null,
+        aiDescription: null,
+        message: "No valid response from AI.",
+      };
     }
   } catch (error) {
     console.error("Error processing AI completion:", error);
-    return null;
+    return {
+      userCard: pickedCard,
+      aiCard: null,
+      aiDescription: null,
+      message: "Error processing AI completion: ",
+    };
   }
 }
