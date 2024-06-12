@@ -38,6 +38,10 @@ body {
   background-color: var(--btn-bg-color);
 }
 
+.btn_component_blue {
+  background-color: var(--color-header-footer);
+}
+
 .card_button {
   display: flex;
   align-items: center;
