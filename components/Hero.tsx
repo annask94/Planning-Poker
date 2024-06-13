@@ -12,28 +12,30 @@ const Hero = () => {
           Enter task details, choose your estimate card, and with a click,
           receive not just your estimation but also an AI-backed analysis.
         </p>
-        <Link
-          href="
-        ./estimate"
-        >
-          <button
-            className="btn_component text-xl md:text-2xl px-10 py-1 rounded-md font-medium text-white hover:opacity-70"
-            type="button"
+        <section className="flex flex-wrap md:justify-start justify-center items-center gap-3">
+          <Link
+            href="
+          ./estimate"
           >
-            Single user
-          </button>
-        </Link>
-        <Link
-          href="
-        ./team"
-        >
-          <button
-            className="btn_component text-xl md:text-2xl px-10  py-1 ml-5 rounded-md font-medium text-white hover:opacity-70"
-            type="button"
+            <button
+              className="btn_component text-xl md:text-2xl px-10 py-1 rounded-md font-medium text-white hover:opacity-70"
+              type="button"
+            >
+              Single user
+            </button>
+          </Link>
+          <Link
+            href="
+          ./team"
           >
-            Team
-          </button>
-        </Link>
+            <button
+              className="btn_component text-xl md:text-2xl px-10  py-1 ml-5 rounded-md font-medium text-white hover:opacity-70"
+              type="button"
+            >
+              Team
+            </button>
+          </Link>
+        </section>
       </section>
       <section className="main_img">
         <Image

@@ -50,7 +50,7 @@ body {
   height: min(15vw, 110px);
   min-height: 50px;
   padding: clamp(1rem, 2vw, 2rem) clamp(0.5rem, 1vw, 1.5rem);
-  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-size: clamp(1rem, 2vw, 2rem);
   color: var(--color-header-footer);
   border: solid 2px var(--color-header-footer);
   border-radius: 15px;
@@ -61,7 +61,7 @@ body {
 
 .card_button:hover,
 .card_button.card_picked {
-  transform: translateY(-30px);
+  transform: translateY(-20px);
 }
 
 .card_picked {

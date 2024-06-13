@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <>
       <form
-        className="flex flex-col gap-8 justify-center items-center"
+        className="flex flex-col md:gap-8 gap-4 justify-center items-center mx-3"
         action={async (formData: FormData) => {
           const validation = formDataSchema.safeParse({
             prompt: formData.get("prompt"),
@@ -59,7 +59,8 @@ export default function Home() {
           rows={5}
           cols={50}
           placeholder="Use max 150 words. Be clear and specific, include key details, describe goals and challenges, use actionable language, and provide context if needed..."
-          className="task_description rounded-md border-2 border-gray-300 outline-none p-2"
+          className="task_description rounded-md border-2 border-gray-300 outline-none p-2
+             w-full md:w-[80vw] h-[40vh] md:h-[30vh]"
         />
         {errors.prompt && (
           <p className="text-red-500 text-sm">{errors.prompt}</p>
