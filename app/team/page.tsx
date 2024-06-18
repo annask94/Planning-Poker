@@ -2,6 +2,7 @@
 import { useState } from "react";
 import CustomBtn from "@/components/CustomBtn";
 import { CustomBtnBlue, LabelInput } from "@/components/CreateJoinForm";
+import Link from "next/link";
 
 export default function Home() {
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -9,12 +10,12 @@ export default function Home() {
 
   const toggleCreateForm = () => {
     setShowCreateForm(!showCreateForm);
-    setShowJoinForm(false); // Hide join form when creating a new room
+    setShowJoinForm(false);
   };
 
   const toggleJoinForm = () => {
     setShowJoinForm(!showJoinForm);
-    setShowCreateForm(false); // Hide create form when joining a room
+    setShowCreateForm(false);
   };
 
   return (
@@ -49,7 +50,9 @@ export default function Home() {
                 nameInput="nameAdmin"
                 placeholderInput="Enter your name"
               />
-              <CustomBtnBlue type="submit" text="Create room" />
+              <Link href="/room">
+                <CustomBtnBlue type="submit" text="Create room" />
+              </Link>
             </form>
           )}
         </div>
