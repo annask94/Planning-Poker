@@ -29,7 +29,7 @@ const MemberCard = ({ member }: MemberCardProps) => (
 
 const MembersList: React.FC = () => {
   return (
-    <div className="flex gap-4 justify-center items-center flex-wrap">
+    <div className="flex gap-4 flex-col justify-center items-center flex-wrap">
       {guestsList.map((member) => (
         <MemberCard key={member.id} member={member} />
       ))}
