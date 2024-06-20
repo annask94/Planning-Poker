@@ -20,7 +20,13 @@ app.prepare().then(() => {
   });
 
   io.on("connection", (socket) => {
-    console.log(socket.id);
+    console.log(
+      `Client connected: ${socket.id} from ${socket.handshake.headers.origin}`
+    );
+
+    socket.on("disconnect", (reason) => {
+      console.log(`Client disconnected: ${socket.id} Reason: ${reason}`);
+    });
   });
 
   httpServer
