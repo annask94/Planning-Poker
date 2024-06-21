@@ -12,6 +12,7 @@
 }
 :root {
   --color-header-footer: rgb(52, 152, 219);
+  --color-members-bg: rgb(223, 241, 254);
   --btn-bg-color: rgb(230, 126, 34);
   --card-hover-light-orange: rgb(255, 246, 238);
   --text-color: rgb(18, 53, 77);
@@ -72,4 +73,15 @@ body {
 
 .task_description:focus {
   border: solid 2px var(--color-header-footer);
+}
+
+.members_list {
+  background-color: var(--color-members-bg);
+  padding-top: 10%;
+  padding-bottom: 10%;
+}
+
+.member_card {
+  width: 80%;
+  box-shadow: 10px 10px 20px rgba(13, 39, 80, 0.16);
 }

@@ -8,6 +8,9 @@ const guestsList: MemberData[] = [
   { id: 4, name: "Chad", role: "guest" },
   { id: 5, name: "Lilly", role: "guest" },
   { id: 6, name: "Anna", role: "guest" },
+  { id: 6, name: "Anna", role: "guest" },
+  { id: 6, name: "Anna", role: "guest" },
+  { id: 6, name: "Anna", role: "guest" },
 ];
 
 export interface MemberData {
@@ -21,15 +24,15 @@ interface MemberCardProps {
 }
 
 const MemberCard = ({ member }: MemberCardProps) => (
-  <div>
-    <h2>{member.name}</h2>
+  <div className="bg-white p-4 member_card self-center rounded-2xl">
+    <h2 className="text-lg">{member.name}</h2>
     <p>{member.role}</p>
   </div>
 );
 
 const MembersList: React.FC = () => {
   return (
-    <div className="flex gap-4 flex-col justify-center items-center flex-wrap">
+    <div className="grid grid-cols-1 gap-4 justify-items-center items-center members_list rounded-2xl overflow-y-auto max-h-[80vh]">
       {guestsList.map((member) => (
         <MemberCard key={member.id} member={member} />
       ))}
