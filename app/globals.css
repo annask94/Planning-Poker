@@ -12,7 +12,7 @@
 }
 :root {
   --color-header-footer: rgb(52, 152, 219);
-  --color-members-bg: rgb(223, 241, 254);
+  --color-members-bg: rgb(52, 152, 219);
   --btn-bg-color: rgb(230, 126, 34);
   --card-hover-light-orange: rgb(255, 246, 238);
   --text-color: rgb(18, 53, 77);
@@ -58,6 +58,13 @@ body {
   transition: transform 0.3s ease;
   background: white;
   cursor: pointer;
+}
+
+.smaller_card {
+  height: min(10vw, 80px);
+  min-height: 40px;
+  padding: clamp(0.5rem, 1vw, 1rem) clamp(0.25rem, 0.5vw, 0.75rem);
+  font-size: clamp(0.75rem, 1.5vw, 1.5rem);
 }
 
 .card_button:hover,

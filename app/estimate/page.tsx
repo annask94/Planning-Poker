@@ -65,7 +65,7 @@ export default function Home() {
         {errors.prompt && (
           <p className="text-red-500 text-sm">{errors.prompt}</p>
         )}
-        <h2 className="text-xl md:text-4xl">Pick a card</h2>
+
         <CardSet />
         {errors.cardSelection && (
           <p className="text-red-500 text-sm">{errors.cardSelection}</p>

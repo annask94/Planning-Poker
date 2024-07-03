@@ -25,11 +25,14 @@ interface CardProps {
   card: CardData;
   onChange: (card: CardData) => void;
   checked: boolean;
+  cardClassName?: string;
 }
 
-const Card = ({ card, onChange, checked }: CardProps) => (
+const Card = ({ card, onChange, checked, cardClassName }: CardProps) => (
   <label
-    className={`card_button font-bold ${checked ? "card_picked" : ""}`}
+    className={`card_button font-bold ${
+      checked ? "card_picked" : ""
+    } ${cardClassName}`}
     htmlFor={card.id}
   >
     <input
@@ -45,7 +48,15 @@ const Card = ({ card, onChange, checked }: CardProps) => (
   </label>
 );
 
-const CardSet: React.FC = () => {
+interface CardSetProps {
+  cardClassName?: string;
+  containerClassName?: string;
+}
+
+const CardSet: React.FC<CardSetProps> = ({
+  cardClassName,
+  containerClassName,
+}) => {
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
 
   const handleCardSelect = (card: CardData) => {
@@ -53,16 +64,20 @@ const CardSet: React.FC = () => {
   };
 
   return (
-    <fieldset className="flex gap-4 justify-center items-center flex-wrap">
-      {cardSetOne.map((card) => (
-        <Card
-          key={card.id}
-          card={card}
-          onChange={handleCardSelect}
-          checked={selectedCard?.id === card.id}
-        />
-      ))}
-    </fieldset>
+    <>
+      <h2 className="text-xl md:text-2xl">Pick a card</h2>
+      <fieldset className="flex gap-4 justify-center items-center flex-wrap">
+        {cardSetOne.map((card) => (
+          <Card
+            key={card.id}
+            card={card}
+            onChange={handleCardSelect}
+            checked={selectedCard?.id === card.id}
+            cardClassName={cardClassName}
+          />
+        ))}
+      </fieldset>
+    </>
   );
 };
 

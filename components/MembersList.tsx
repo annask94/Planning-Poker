@@ -5,12 +5,6 @@ const guestsList: MemberData[] = [
   { id: 1, name: "Michael", role: "admin" },
   { id: 2, name: "Nancy", role: "guest" },
   { id: 3, name: "Shawn", role: "guest" },
-  { id: 4, name: "Chad", role: "guest" },
-  { id: 5, name: "Lilly", role: "guest" },
-  { id: 6, name: "Anna", role: "guest" },
-  { id: 6, name: "Anna", role: "guest" },
-  { id: 6, name: "Anna", role: "guest" },
-  { id: 6, name: "Anna", role: "guest" },
 ];
 
 export interface MemberData {
@@ -32,7 +26,7 @@ const MemberCard = ({ member }: MemberCardProps) => (
 
 const MembersList: React.FC = () => {
   return (
-    <div className="grid grid-cols-1 gap-4 justify-items-center items-center members_list rounded-2xl overflow-y-auto max-h-[80vh]">
+    <div className="grid grid-cols-1 gap-4 justify-items-center items-center members_list rounded-2xl overflow-y-auto max-h-[90vh] w-[25vw]">
       {guestsList.map((member) => (
         <MemberCard key={member.id} member={member} />
       ))}
