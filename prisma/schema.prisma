@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id String @id @default(cuid())
+  name String
+  createdAt DateTime @default(now())
+  users User[]
+  projects Project[]
+}
+
+model User {
+  id String @id @default(cuid())
+  name String
+  role String 
+  Room Room @relation(fields: [roomId], references: [id])
+  roomId String
+  estimate Estimate?
+}
+
+model Project {
+  id String @id @default(cuid())
+  content String 
+  Room Room @relation(fields: [roomId], references: [id])
+  roomId String
+  taska Task[]
+}
+
+model Task {
+  id String @id @default(cuid())
+  content String
+  Project Project @relation(fields:[projectID], references: [id])
+  projectID String
+  estimates Estimate[]
+  aiEstimate AIEstimate?
+  
+}
+
+model Estimate {
+  id String @id @default(cuid())
+  card String
+  Task Task @relation(fields:[taskID], references: [id])
+  taskID String
+  User User @relation(fields:[userID], references: [id])
+  userID String @unique
+}
+
+model AIEstimate {
+  id String @id @default(cuid())
+  card Int
+  description String
+  Task Task @relation(fields:[taskID], references: [id])
+  taskID String @unique
+}
+
+

@@ -37,7 +37,7 @@ export default function Home() {
         <div className="flex flex-col items-center gap-3">
           <CustomBtn type="button" text="Create" onClick={toggleCreateForm} />
           {showCreateForm && (
-            <form className="flex flex-col">
+            <form className="flex flex-col items-center">
               <LabelInput
                 id="nameRoom"
                 labelText="Room name"
