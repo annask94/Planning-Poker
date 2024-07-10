@@ -1,55 +1,26 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import useSocket from "@/hooks/useSocket";
 import MembersList, { MemberData } from "@/components/MembersList";
 import CardSet from "@/components/CardSets";
 import CustomBtn from "@/components/CustomBtn";
 import RoomTitle from "@/components/RoomTitle";
 
-const mockRoom = "123";
-const mockRole = "admin";
+interface AdminInterfaceProps {
+  roomId: string;
+  nameAdmin: string | null;
+  members: MemberData[];
+}
 
-const Room = () => {
-  const { socket, isConnected, transport } = useSocket("http://localhost:5000");
-  const [members, setMembers] = useState<MemberData[]>([]);
-  const [taskDescription, setTaskDescription] = useState("");
-
-  useEffect(() => {
-    if (socket) {
-      // Join the hardcoded room
-      socket.emit("join-room", mockRoom);
-      socket.on("room-joined", (members: MemberData[]) => {
-        setMembers(members);
-      });
-    }
-
-    return () => {
-      if (socket) {
-        socket.off("room-joined");
-      }
-    };
-  }, [socket]);
-
-  const handleTaskDescriptionChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setTaskDescription(e.target.value);
-  };
-
-  const handleSubmitTask = () => {
-    if (socket) {
-      socket.emit("submit-task", taskDescription);
-    }
-  };
-
+const AdminInterface = ({
+  roomId,
+  nameAdmin,
+  members,
+}: AdminInterfaceProps) => {
   return (
     <>
       <section className="roomBoard grid grid-cols-1fr-2fr-1fr m-4 items-start justify-items-center">
         <RoomTitle
-          memberName="Michael"
-          memberRole={mockRole}
-          roomName={mockRoom}
+          memberName={nameAdmin || "Admin"}
+          memberRole="admin"
+          roomName={roomId}
         />
         <form className="flex flex-col md:gap-8 gap-4 justify-center items-center">
           <label htmlFor="projectkDescription" className="text-l md:text-2xl">
@@ -84,4 +55,4 @@ const Room = () => {
   );
 };
 
-export default Room;
+export default AdminInterface;

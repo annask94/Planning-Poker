@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 
 const guestsList: MemberData[] = [
   { id: 1, name: "Michael", role: "admin" },
@@ -8,9 +8,9 @@ const guestsList: MemberData[] = [
 ];
 
 export interface MemberData {
-  id: number;
-  name: string;
-  role: "admin" | "guest";
+  userId: number;
+  userName: string;
+  role: string;
 }
 
 interface MemberCardProps {
@@ -19,7 +19,7 @@ interface MemberCardProps {
 
 const MemberCard = ({ member }: MemberCardProps) => (
   <div className="bg-white p-4 member_card self-center rounded-2xl">
-    <h2 className="text-lg">{member.name}</h2>
+    <h2 className="text-lg">{member.userName}</h2>
     <p>{member.role}</p>
   </div>
 );

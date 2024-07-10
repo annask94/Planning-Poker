@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import CustomBtn from "@/components/CustomBtn";
 import { CustomBtnBlue, LabelInput } from "@/components/CreateJoinForm";
-import Link from "next/link";
+import { createRoom, joinRoom } from "./actions";
 
 export default function Home() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showJoinForm, setShowJoinForm] = useState(false);
+  const router = useRouter();
 
   const toggleCreateForm = () => {
     setShowCreateForm(!showCreateForm);
@@ -18,6 +20,20 @@ export default function Home() {
     setShowCreateForm(false);
   };
 
+  const handleCreateRoom = async (formData: FormData) => {
+    const roomId = await createRoom(formData);
+    sessionStorage.setItem("userRole", "admin");
+    sessionStorage.setItem("userName", formData.get("nameAdmin") as string);
+    router.push(`/room/${roomId}`);
+  };
+
+  const handleJoinRoom = async (formData: FormData) => {
+    const roomId = await joinRoom(formData);
+    sessionStorage.setItem("userRole", "guest");
+    sessionStorage.setItem("userName", formData.get("nameGuest") as string);
+    router.push(`/room/${roomId}`);
+  };
+
   return (
     <main className="flex flex-col justify-center items-center md:gap-20 gap-10 mx-6">
       <section className="flex flex-col text-center">
@@ -26,7 +42,7 @@ export default function Home() {
         </h1>
         <p className="md:text-xl mb-2">
           Create a room to become the admin and invite your team with a room
-          number. As the admin, you’ll manage task descriptions.
+          number. As the admin, you will manage task descriptions.
         </p>
         <p className="md:text-xl">
           To join an existing room, use the room number from your admin or team
@@ -37,7 +53,10 @@ export default function Home() {
         <div className="flex flex-col items-center gap-3">
           <CustomBtn type="button" text="Create" onClick={toggleCreateForm} />
           {showCreateForm && (
-            <form className="flex flex-col items-center">
+            <form
+              action={handleCreateRoom}
+              className="flex flex-col items-center"
+            >
               <LabelInput
                 id="nameRoom"
                 labelText="Room name"
@@ -50,16 +69,15 @@ export default function Home() {
                 nameInput="nameAdmin"
                 placeholderInput="Enter your name"
               />
-              <Link href="/room">
-                <CustomBtnBlue type="submit" text="Create room" />
-              </Link>
+
+              <CustomBtnBlue type="submit" text="Create room" />
             </form>
           )}
         </div>
         <div className="flex flex-col items-center gap-3">
           <CustomBtn type="button" text="Join" onClick={toggleJoinForm} />
           {showJoinForm && (
-            <form className="flex flex-col">
+            <form action={handleJoinRoom} className="flex flex-col">
               <LabelInput
                 id="roomNumber"
                 labelText="Room number"
