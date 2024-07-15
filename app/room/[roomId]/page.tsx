@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import useSocket from "@/hooks/useSocket";
 import { useRouter } from "next/router";
-import MembersList, { MemberData } from "@/components/MembersList";
 import AdminInterface from "@/components/AdminInterface";
 import GuestInterface from "@/components/GuestInterface";
 
@@ -16,9 +15,9 @@ interface RoomParams {
 const Room = ({ params }: RoomParams) => {
   const { roomId } = params;
   const { socket, isConnected, transport } = useSocket("http://localhost:5000");
-  const [members, setMembers] = useState<MemberData[]>([]);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     if (socket && isConnected) {
@@ -32,8 +31,9 @@ const Room = ({ params }: RoomParams) => {
         userRole: storedRole,
         userName: storedName,
       });
-      socket.on("room-joined", (members: MemberData[]) => {
-        setMembers(members);
+
+      socket.on("room-joined", (users) => {
+        setUsers(users);
       });
 
       return () => {
@@ -44,13 +44,23 @@ const Room = ({ params }: RoomParams) => {
 
   if (userRole === "admin") {
     return (
-      <AdminInterface roomId={roomId} members={members} nameAdmin={userName} />
+      <AdminInterface
+        roomId={roomId}
+        nameAdmin={userName}
+        roomName="Nightmare Room"
+        users={users}
+      />
     );
   }
 
   if (userRole === "guest") {
     return (
-      <GuestInterface roomId={roomId} members={members} nameGuest={userName} />
+      <GuestInterface
+        roomId={roomId}
+        nameGuest={userName}
+        roomName="Nightmare Room"
+        users={users}
+      />
     );
   }
 

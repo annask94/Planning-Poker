@@ -1,26 +1,30 @@
-import MembersList, { MemberData } from "@/components/MembersList";
+import MembersList from "@/components/MembersList";
 import CardSet from "@/components/CardSets";
 import CustomBtn from "@/components/CustomBtn";
 import RoomTitle from "@/components/RoomTitle";
+import { User } from "@prisma/client";
 
 interface AdminInterfaceProps {
   roomId: string;
+  roomName: string;
   nameAdmin: string | null;
-  members: MemberData[];
+  users: User[];
 }
 
 const AdminInterface = ({
   roomId,
+  roomName,
   nameAdmin,
-  members,
+  users,
 }: AdminInterfaceProps) => {
   return (
     <>
-      <section className="roomBoard grid grid-cols-1fr-2fr-1fr m-4 items-start justify-items-center">
+      <section className="roomBoard grid grid-cols-2fr-5fr-3fr m-4 items-start justify-items-center">
         <RoomTitle
           memberName={nameAdmin || "Admin"}
           memberRole="admin"
-          roomName={roomId}
+          roomId={roomId}
+          roomName={roomName}
         />
         <form className="flex flex-col md:gap-8 gap-4 justify-center items-center">
           <label htmlFor="projectkDescription" className="text-l md:text-2xl">
@@ -49,7 +53,7 @@ const AdminInterface = ({
           <CardSet cardClassName="smaller_card" />
           <CustomBtn type="submit" text="Estimate" />
         </form>
-        <MembersList />
+        <MembersList users={users} />
       </section>
     </>
   );

@@ -1,7 +1,7 @@
 const { createServer } = require("http");
 const next = require("next");
 const { Server } = require("socket.io");
-import { createRoom, joinRoom } from "app/team/actions.ts";
+const prisma = require("@/lib/db");
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -24,42 +24,16 @@ app.prepare().then(() => {
       `Client connected: ${socket.id} from ${socket.handshake.headers.origin}`
     );
 
-    socket.on("create-room", async (data, callback) => {
-      const { nameRoom, nameAdmin } = data;
+    socket.on("join-room", async ({ roomId, userRole, userName }) => {
+      const users = await prisma.user.findMany({
+        where: {
+          roomId: roomId,
+        },
+      });
+      socket.emit("room-joined", users);
 
-      try {
-        const room = await createRoom(
-          new FormData(Object.entries({ nameRoom, nameAdmin }))
-        );
-        socket.join(room.id);
-        callback({ success: true, room });
-        io.to(room.id).emit("room-joined", {
-          userId: socket.id,
-          userName: nameAdmin,
-          role: "admin",
-        });
-      } catch (error) {
-        callback({ success: false, error: error.message });
-      }
-    });
-
-    socket.on("join-room", async (data, callback) => {
-      const { roomId, nameGuest } = data;
-
-      try {
-        const user = await joinRoom(
-          new FormData(Object.entries({ roomNumber: roomId, nameGuest }))
-        );
-        socket.join(roomId);
-        callback({ success: true, user });
-        io.to(roomId).emit("room-joined", {
-          userId: socket.id,
-          userName: nameGuest,
-          role: "guest",
-        });
-      } catch (error) {
-        callback({ success: false, error: error.message });
-      }
+      socket.join(roomId);
+      socket.to(roomId).emit("user-joined", { userName, userRole });
     });
 
     socket.on("disconnect", (reason) => {

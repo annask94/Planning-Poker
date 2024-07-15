@@ -25,10 +25,7 @@ export async function createRoom(formData: FormData) {
     },
   });
 
-  sessionStorage.setItem("userRole", "admin");
-  sessionStorage.setItem("userName", nameAdmin);
-
-  return room;
+  return room.id;
 }
 
 export async function joinRoom(formData: FormData) {
@@ -55,8 +52,5 @@ export async function joinRoom(formData: FormData) {
     },
   });
 
-  sessionStorage.setItem("userRole", "guest");
-  sessionStorage.setItem("userName", nameGuest);
-
-  return user;
+  return room.id;
 }

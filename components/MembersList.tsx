@@ -1,36 +1,37 @@
 "use client";
-import React from "react";
-
-const guestsList: MemberData[] = [
-  { id: 1, name: "Michael", role: "admin" },
-  { id: 2, name: "Nancy", role: "guest" },
-  { id: 3, name: "Shawn", role: "guest" },
-];
-
-export interface MemberData {
-  userId: number;
-  userName: string;
-  role: string;
-}
+import React, { useEffect, useState } from "react";
+import { User } from "@prisma/client";
 
 interface MemberCardProps {
-  member: MemberData;
+  userName: string;
+  userRole: string;
 }
-
-const MemberCard = ({ member }: MemberCardProps) => (
+const MemberCard = ({ userName, userRole }: MemberCardProps) => (
   <div className="bg-white p-4 member_card self-center rounded-2xl">
-    <h2 className="text-lg">{member.userName}</h2>
-    <p>{member.role}</p>
+    <h2 className="text-lg">{userName}</h2>
+    <p>{userRole}</p>
   </div>
 );
 
-const MembersList: React.FC = () => {
+interface MemberListProps {
+  users: User[];
+}
+
+const MembersList = ({ users }: MemberListProps) => {
+  const usersData = users.map((user) => ({
+    userName: user.name,
+    userRole: user.role,
+  }));
+
   return (
-    <div className="grid grid-cols-1 gap-4 justify-items-center items-center members_list rounded-2xl overflow-y-auto max-h-[90vh] w-[25vw]">
-      {guestsList.map((member) => (
-        <MemberCard key={member.id} member={member} />
-      ))}
-    </div>
+    <section className="flex flex-col mt-6 items-center">
+      <h2>Team</h2>
+      <div className="grid grid-cols-1 gap-4 mt-6 justify-items-center items-center members_list rounded-2xl overflow-y-auto max-h-[90vh] w-[25vw]">
+        {users.map((user, index) => (
+          <MemberCard key={index} userName={user.name} userRole={user.role} />
+        ))}
+      </div>
+    </section>
   );
 };
 

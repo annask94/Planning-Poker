@@ -12,7 +12,7 @@
 }
 :root {
   --color-header-footer: rgb(52, 152, 219);
-  --color-members-bg: rgb(52, 152, 219);
+  --color-members-bg: rgb(192, 230, 255);
   --btn-bg-color: rgb(230, 126, 34);
   --card-hover-light-orange: rgb(255, 246, 238);
   --text-color: rgb(18, 53, 77);
@@ -21,6 +21,9 @@
 
 body {
   color: var(--text-color);
+}
+h2 {
+  font-weight: 500;
 }
 
 @media (prefers-color-scheme: dark) {
