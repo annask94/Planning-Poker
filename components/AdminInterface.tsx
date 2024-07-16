@@ -1,7 +1,6 @@
 import MembersList from "@/components/MembersList";
 import CardSet from "@/components/CardSets";
 import CustomBtn from "@/components/CustomBtn";
-import RoomTitle from "@/components/RoomTitle";
 import { User } from "@prisma/client";
 
 interface AdminInterfaceProps {
@@ -19,14 +18,21 @@ const AdminInterface = ({
 }: AdminInterfaceProps) => {
   return (
     <>
-      <section className="roomBoard grid grid-cols-2fr-5fr-3fr m-4 items-start justify-items-center">
-        <RoomTitle
-          memberName={nameAdmin || "Admin"}
-          memberRole="admin"
-          roomId={roomId}
-          roomName={roomName}
-        />
-        <form className="flex flex-col md:gap-8 gap-4 justify-center items-center">
+      <section className="roomBoard grid grid-cols-2fr-5fr-3fr items-start justify-items-stretch">
+        <section className="flex flex-col gap-6 p-4 items-center justify-start min-h-full btn_component_blue text-white text-center">
+          <h2>Hi {nameAdmin}!</h2>
+          <p>Today you are the Admin!</p>
+          <p>You are in the {roomName} Room </p>
+          <div className="border border-white">
+            <p className="font-semibold">
+              Copy the room ID to invite other guests
+            </p>
+            <p>{roomId}</p>
+          </div>
+          <button type="button">Leave room</button>
+        </section>
+
+        <form className="flex flex-col md:gap-6 gap-2 mt-4 mb-4 justify-center items-center">
           <label htmlFor="projectkDescription" className="text-l md:text-2xl">
             Project description
           </label>

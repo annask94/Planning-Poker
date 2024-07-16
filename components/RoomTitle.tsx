@@ -17,7 +17,7 @@ const RoomTitle = ({
       <p>Today you are the {memberRole}!</p>
       <h2>You are in the {roomName} Room </h2>
       <h2>ID to invite other guests</h2>
-      <p>{roomId}!</p>
+      <p>{roomId}</p>
       <button type="button">Leave room</button>
     </section>
   );

@@ -1,8 +1,9 @@
 const { createServer } = require("http");
 const next = require("next");
 const { Server } = require("socket.io");
-const prisma = require("@/lib/db");
+const { PrismaClient } = require("@prisma/client");
 
+const prisma = new PrismaClient();
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
 const port = 5000;
