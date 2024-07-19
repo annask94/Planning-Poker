@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import useSocket from "@/hooks/useSocket";
-import { useRouter } from "next/router";
 import AdminInterface from "@/components/AdminInterface";
 import GuestInterface from "@/components/GuestInterface";
+import { User } from "@prisma/client";
 
 interface RoomParams {
   params: {
@@ -17,7 +17,8 @@ const Room = ({ params }: RoomParams) => {
   const { socket, isConnected, transport } = useSocket("http://localhost:5000");
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [roomName, setRoomName] = useState<string>("");
 
   useEffect(() => {
     if (socket && isConnected) {
@@ -26,18 +27,27 @@ const Room = ({ params }: RoomParams) => {
       setUserRole(storedRole);
       setUserName(storedName);
 
+      console.log("Emitting join-room event");
       socket.emit("join-room", {
         roomId,
         userRole: storedRole,
         userName: storedName,
       });
 
-      socket.on("room-joined", (users) => {
+      socket.on("room-joined", ({ users, roomName }) => {
+        console.log("Room joined:", users, roomName);
+        setUsers(users);
+        setRoomName(roomName);
+      });
+
+      socket.on("user-joined", ({ users }) => {
+        console.log("User joined:", users);
         setUsers(users);
       });
 
       return () => {
         socket.off("room-joined");
+        socket.off("user-joined");
       };
     }
   }, [socket, isConnected, roomId]);
@@ -47,8 +57,9 @@ const Room = ({ params }: RoomParams) => {
       <AdminInterface
         roomId={roomId}
         nameAdmin={userName}
-        roomName="Nightmare Room"
+        roomName={roomName}
         users={users}
+        socket={socket}
       />
     );
   }
@@ -58,8 +69,9 @@ const Room = ({ params }: RoomParams) => {
       <GuestInterface
         roomId={roomId}
         nameGuest={userName}
-        roomName="Nightmare Room"
+        roomName={roomName}
         users={users}
+        socket={socket}
       />
     );
   }

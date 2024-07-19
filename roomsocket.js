@@ -26,16 +26,74 @@ app.prepare().then(() => {
     );
 
     socket.on("join-room", async ({ roomId, userRole, userName }) => {
-      const users = await prisma.user.findMany({
-        where: {
-          roomId: roomId,
-        },
-      });
-      socket.emit("room-joined", users);
+      console.log(
+        `User ${userName} with role ${userRole} joined room ${roomId}`
+      );
 
-      socket.join(roomId);
-      socket.to(roomId).emit("user-joined", { userName, userRole });
+      try {
+        console.log("Fetching users for room:", roomId);
+        const users = await prisma.user.findMany({
+          where: { roomId: roomId },
+        });
+        console.log("Fetched users:", users);
+
+        if (!users || users.length === 0) {
+          console.error("No users found for room:", roomId);
+        }
+
+        console.log("Fetching roomName for room:", roomId);
+        const room = await prisma.room.findUnique({
+          where: { id: roomId },
+          select: { name: true },
+        });
+        console.log("Fetched room details:", room);
+
+        socket.emit("room-joined", { users, roomName: room?.name });
+        socket.join(roomId);
+        io.to(roomId).emit("user-joined", { users });
+      } catch (error) {
+        console.error("Error fetching users or room details:", error);
+      }
     });
+
+    socket.on(
+      "share-project",
+      async ({ roomId, projectDescription, taskDescription }) => {
+        console.log(
+          "Received share-project event:",
+          roomId,
+          projectDescription,
+          taskDescription
+        );
+        try {
+          const project = await prisma.project.create({
+            data: {
+              content: projectDescription,
+              roomId: roomId,
+              tasks: {
+                create: { content: taskDescription },
+              },
+            },
+            include: { tasks: true },
+          });
+
+          console.log(
+            "Project shared:",
+            project.content,
+            project.tasks[0].content,
+            project.tasks[0].id
+          );
+
+          io.to(roomId).emit("project-shared", {
+            projectDescription: project.content,
+            taskDescription: project.tasks[0].content,
+            taskId: project.tasks[0].id,
+          });
+        } catch (error) {
+          console.error("Error sharing project:", error);
+        }
+      }
+    );
 
     socket.on("disconnect", (reason) => {
       console.log(`Client disconnected: ${socket.id} Reason: ${reason}`);

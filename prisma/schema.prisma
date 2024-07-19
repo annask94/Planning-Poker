@@ -32,7 +32,7 @@ model Project {
   content String 
   Room Room @relation(fields: [roomId], references: [id])
   roomId String
-  taska Task[]
+  tasks Task[]
 }
 
 model Task {

@@ -52,13 +52,13 @@ h2 {
   align-items: center;
   justify-content: center;
   aspect-ratio: 7 / 11;
-  height: min(15vw, 110px);
-  min-height: 50px;
+  height: min(10vw, 50px);
+  min-height: 20px;
   padding: clamp(1rem, 2vw, 2rem) clamp(0.5rem, 1vw, 1.5rem);
-  font-size: clamp(1rem, 2vw, 2rem);
+  font-size: clamp(0.75rem, 1.2vw, 1.75rem);
   color: var(--color-header-footer);
   border: solid 2px var(--color-header-footer);
-  border-radius: 15px;
+  border-radius: 10px;
   transition: transform 0.3s ease;
   background: white;
   cursor: pointer;
