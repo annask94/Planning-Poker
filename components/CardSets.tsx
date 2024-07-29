@@ -51,16 +51,19 @@ const Card = ({ card, onChange, checked, cardClassName }: CardProps) => (
 interface CardSetProps {
   cardClassName?: string;
   containerClassName?: string;
+  onCardSelect: (card: CardData) => void;
 }
 
 const CardSet: React.FC<CardSetProps> = ({
   cardClassName,
   containerClassName,
+  onCardSelect,
 }) => {
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
 
   const handleCardSelect = (card: CardData) => {
     setSelectedCard(card);
+    onCardSelect(card);
   };
 
   return (

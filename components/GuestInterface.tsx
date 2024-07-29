@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MembersList from "@/components/MembersList";
 import { User } from "@prisma/client";
 import ShareDescription from "./ShareDescription";
+import { CardData } from "./CardSets";
 
 interface GuestInterfaceProps {
   roomId: string;
@@ -15,6 +16,9 @@ interface GuestInterfaceProps {
 interface SharedDescription {
   projectDescription: string;
   taskDescription: string;
+  taskId: string;
+  handleEstimate: () => void;
+  onCardSelect: () => void;
 }
 
 const GuestInterface = ({
@@ -26,13 +30,17 @@ const GuestInterface = ({
 }: GuestInterfaceProps) => {
   const [sharedProjectDescription, setSharedProjectDescription] = useState("");
   const [sharedTaskDescription, setSharedTaskDescription] = useState("");
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+
+  const sharedTaskId = useRef<string | null>(null);
 
   useEffect(() => {
     socket.on(
       "project-shared",
-      ({ projectDescription, taskDescription }: SharedDescription) => {
+      ({ projectDescription, taskDescription, taskId }: SharedDescription) => {
         setSharedProjectDescription(projectDescription);
         setSharedTaskDescription(taskDescription);
+        sharedTaskId.current = taskId;
       }
     );
 
@@ -40,6 +48,23 @@ const GuestInterface = ({
       socket.off("project-shared");
     };
   }, [socket]);
+
+  const handleEstimate = () => {
+    if (selectedCard) {
+      console.log("Emitting estimate event:", {
+        roomId,
+        pickedCard: selectedCard.figure,
+        taskId: sharedTaskId.current,
+      });
+      socket.emit("estimate", {
+        roomId,
+        pickedCard: selectedCard.figure,
+        taskId: sharedTaskId.current,
+      });
+    } else {
+      console.error("No card selected");
+    }
+  };
 
   return (
     <section className="roomBoard grid grid-cols-2fr-5fr-3fr gap-4 items-start justify-items-stretch min-h-screen w-full">
@@ -54,6 +79,8 @@ const GuestInterface = ({
         <ShareDescription
           projectDescription={sharedProjectDescription}
           taskDescription={sharedProjectDescription}
+          handleEstimate={handleEstimate}
+          onCardSelect={setSelectedCard}
         />
       </div>
       <MembersList users={users} />

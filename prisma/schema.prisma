@@ -32,6 +32,7 @@ model Project {
   content String 
   Room Room @relation(fields: [roomId], references: [id])
   roomId String
+  createdAt DateTime @default(now())
   tasks Task[]
 }
 

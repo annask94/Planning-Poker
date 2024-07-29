@@ -48,7 +48,27 @@ app.prepare().then(() => {
         });
         console.log("Fetched room details:", room);
 
-        socket.emit("room-joined", { users, roomName: room?.name });
+        console.log("Fetching latest project for room:", roomId);
+        const latestProject = await prisma.project.findFirst({
+          where: { roomId: roomId },
+          orderBy: { createdAt: "desc" },
+          include: { tasks: true },
+        });
+
+        let projectData = null;
+        if (latestProject) {
+          projectData = {
+            projectDescription: latestProject.content,
+            taskDescription: latestProject.tasks[0].content,
+            taskId: latestProject.tasks[0].id,
+          };
+        }
+
+        socket.emit("room-joined", {
+          users,
+          roomName: room?.name,
+          projectData,
+        });
         socket.join(roomId);
         io.to(roomId).emit("user-joined", { users });
       } catch (error) {
