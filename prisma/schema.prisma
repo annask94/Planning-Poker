@@ -25,6 +25,8 @@ model User {
   Room Room @relation(fields: [roomId], references: [id])
   roomId String
   estimate Estimate?
+  status  String @default("connected")
+  ready String @default("picking")
 }
 
 model Project {
@@ -53,6 +55,7 @@ model Estimate {
   taskID String
   User User @relation(fields:[userID], references: [id])
   userID String @unique
+  createdAt DateTime @default(now())
 }
 
 model AIEstimate {
@@ -61,6 +64,7 @@ model AIEstimate {
   description String
   Task Task @relation(fields:[taskID], references: [id])
   taskID String @unique
+  createdAt DateTime @default(now())
 }
 
 

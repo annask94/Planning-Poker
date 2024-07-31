@@ -11,6 +11,11 @@ interface GuestInterfaceProps {
   roomName: string;
   users: User[];
   socket: any;
+  projectData: {
+    projectDescription: string;
+    taskDescription: string;
+    taskId: string;
+  } | null;
 }
 
 interface SharedDescription {
@@ -27,6 +32,7 @@ const GuestInterface = ({
   roomName,
   users,
   socket,
+  projectData,
 }: GuestInterfaceProps) => {
   const [sharedProjectDescription, setSharedProjectDescription] = useState("");
   const [sharedTaskDescription, setSharedTaskDescription] = useState("");
@@ -54,12 +60,12 @@ const GuestInterface = ({
       console.log("Emitting estimate event:", {
         roomId,
         pickedCard: selectedCard.figure,
-        taskId: sharedTaskId.current,
+        taskId: projectData?.taskId || sharedTaskId.current,
       });
       socket.emit("estimate", {
         roomId,
         pickedCard: selectedCard.figure,
-        taskId: sharedTaskId.current,
+        taskId: projectData?.taskId || sharedTaskId.current,
       });
     } else {
       console.error("No card selected");
@@ -77,8 +83,12 @@ const GuestInterface = ({
         <h2>Welcome to the {roomName} room!</h2>
         <p className="italic">You can view tasks and estimate.</p>
         <ShareDescription
-          projectDescription={sharedProjectDescription}
-          taskDescription={sharedProjectDescription}
+          projectDescription={
+            projectData?.projectDescription || sharedProjectDescription
+          }
+          taskDescription={
+            projectData?.taskDescription || sharedTaskDescription
+          }
           handleEstimate={handleEstimate}
           onCardSelect={setSelectedCard}
         />

@@ -12,6 +12,18 @@ interface RoomParams {
   };
 }
 
+interface ProjectData {
+  projectDescription: string;
+  taskDescription: string;
+  taskId: string;
+}
+
+interface RoomJoinedResponse {
+  users: User[];
+  roomName: string;
+  projectData?: ProjectData;
+}
+
 const Room = ({ params }: RoomParams) => {
   const { roomId } = params;
   const { socket, isConnected, transport } = useSocket("http://localhost:5000");
@@ -19,6 +31,7 @@ const Room = ({ params }: RoomParams) => {
   const [userName, setUserName] = useState<string | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [roomName, setRoomName] = useState<string>("");
+  const [projectData, setProjectData] = useState<ProjectData | null>(null);
 
   useEffect(() => {
     if (socket && isConnected) {
@@ -34,10 +47,13 @@ const Room = ({ params }: RoomParams) => {
         userName: storedName,
       });
 
-      socket.on("room-joined", ({ users, roomName }) => {
-        console.log("Room joined:", users, roomName);
+      socket.on("room-joined", ({ users, roomName, projectData }) => {
+        console.log("Room joined:", users, roomName, projectData);
         setUsers(users);
         setRoomName(roomName);
+        if (projectData) {
+          setProjectData(projectData);
+        }
       });
 
       socket.on("user-joined", ({ users }) => {
@@ -60,6 +76,7 @@ const Room = ({ params }: RoomParams) => {
         roomName={roomName}
         users={users}
         socket={socket}
+        projectData={projectData}
       />
     );
   }
@@ -72,6 +89,7 @@ const Room = ({ params }: RoomParams) => {
         roomName={roomName}
         users={users}
         socket={socket}
+        projectData={projectData}
       />
     );
   }

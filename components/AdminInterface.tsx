@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MembersList from "@/components/MembersList";
-import CardSet from "@/components/CardSets";
 import CustomBtn from "@/components/CustomBtn";
 import ShareDescription from "./ShareDescription";
 import { User } from "@prisma/client";
+import { CardData } from "./CardSets";
 
 interface AdminInterfaceProps {
   roomId: string;
@@ -12,6 +12,11 @@ interface AdminInterfaceProps {
   nameAdmin: string | null;
   users: User[];
   socket: any;
+  projectData: {
+    projectDescription: string;
+    taskDescription: string;
+    taskId: string;
+  } | null;
 }
 
 const AdminInterface = ({
@@ -20,13 +25,16 @@ const AdminInterface = ({
   nameAdmin,
   users,
   socket,
+  projectData,
 }: AdminInterfaceProps) => {
   const [projectDescription, setProjectDescription] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [sharedProjectDescription, setSharedProjectDescription] = useState("");
   const [sharedTaskDescription, setSharedTaskDescription] = useState("");
-  const [sharedTaskId, setSharedTaskId] = useState("");
   const [isShared, setIsShared] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+
+  const sharedTaskId = useRef<string | null>(null);
 
   interface SharedDescription {
     projectDescription: string;
@@ -35,6 +43,13 @@ const AdminInterface = ({
   }
 
   useEffect(() => {
+    if (projectData) {
+      setSharedProjectDescription(projectData.projectDescription);
+      setSharedTaskDescription(projectData.taskDescription);
+      sharedTaskId.current = projectData.taskId;
+      setIsShared(true);
+    }
+
     socket.on(
       "project-shared",
       ({ projectDescription, taskDescription, taskId }: SharedDescription) => {
@@ -46,7 +61,7 @@ const AdminInterface = ({
         );
         setSharedProjectDescription(projectDescription);
         setSharedTaskDescription(taskDescription);
-        setSharedTaskId(taskId);
+        sharedTaskId.current = taskId;
         setIsShared(true);
       }
     );
@@ -54,7 +69,7 @@ const AdminInterface = ({
     return () => {
       socket.off("project-shared");
     };
-  }, [socket]);
+  }, [socket, projectData]);
 
   const handleShare = () => {
     console.log("Emitting share-project event:", {
@@ -69,6 +84,23 @@ const AdminInterface = ({
     });
     setIsShared(true);
   };
+
+  const handleEstimate = () => {
+    if (selectedCard && sharedTaskId.current) {
+      console.log("Emitting estimate event:", {
+        roomId,
+        pickedCard: selectedCard.figure,
+        taskId: sharedTaskId.current,
+      });
+      socket.emit("estimate", {
+        roomId,
+        pickedCard: selectedCard.figure,
+        taskId: sharedTaskId.current,
+      });
+    } else {
+      console.error("No card selected or taskId not available");
+    }
+  };
   return (
     <>
       <section className="roomBoard grid grid-cols-2fr-5fr-3fr items-start justify-items-stretch h-full min-h-screen">
@@ -76,7 +108,7 @@ const AdminInterface = ({
           <h2>Hi {nameAdmin}!</h2>
           <p>Today you are the Admin!</p>
           <p>You are in the {roomName} Room </p>
-          <p>{sharedTaskId}</p>
+          <p>{sharedTaskId.current}</p>
           <div className="border border-white">
             <p className="font-semibold">
               Copy the room ID to invite other guests
@@ -90,6 +122,8 @@ const AdminInterface = ({
           <ShareDescription
             projectDescription={sharedProjectDescription}
             taskDescription={sharedTaskDescription}
+            handleEstimate={handleEstimate}
+            onCardSelect={setSelectedCard}
           />
         ) : (
           <form

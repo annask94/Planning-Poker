@@ -62,6 +62,7 @@ app.prepare().then(() => {
             taskDescription: latestProject.tasks[0].content,
             taskId: latestProject.tasks[0].id,
           };
+          console.log(projectDescription, taskDescription, taskId);
         }
 
         socket.emit("room-joined", {
@@ -114,6 +115,27 @@ app.prepare().then(() => {
         }
       }
     );
+
+    socket.on("estimate", async ({ pickedCard, roomId, taskId }) => {
+      console.log("Received estimate event:", pickedCard, roomId, taskId);
+      try {
+        const project = await prisma.estimate.create({
+          data: {
+            card: pickedCard,
+            taskID: taskId,
+          },
+        });
+
+        console.log("Estimate shared:", estimate.card, estimate.taskID);
+
+        io.to(roomId).emit("estimate-shared", {
+          userEstmate: estimate.card,
+          taskId: estimate.taskID,
+        });
+      } catch (error) {
+        console.error("Error sharing estimate:", error);
+      }
+    });
 
     socket.on("disconnect", (reason) => {
       console.log(`Client disconnected: ${socket.id} Reason: ${reason}`);
