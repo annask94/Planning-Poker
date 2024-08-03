@@ -25,9 +25,9 @@ app.prepare().then(() => {
       `Client connected: ${socket.id} from ${socket.handshake.headers.origin}`
     );
 
-    socket.on("join-room", async ({ roomId, userRole, userName }) => {
+    socket.on("join-room", async ({ roomId, userRole, userName, userId }) => {
       console.log(
-        `User ${userName} with role ${userRole} joined room ${roomId}`
+        `User ${userName} with role ${userRole} and user ID ${userId} joined room ${roomId}`
       );
 
       try {
@@ -62,7 +62,11 @@ app.prepare().then(() => {
             taskDescription: latestProject.tasks[0].content,
             taskId: latestProject.tasks[0].id,
           };
-          console.log(projectDescription, taskDescription, taskId);
+          console.log(
+            projectData.projectDescription,
+            projectData.taskDescription,
+            projectData.taskId
+          );
         }
 
         socket.emit("room-joined", {
@@ -116,13 +120,24 @@ app.prepare().then(() => {
       }
     );
 
-    socket.on("estimate", async ({ pickedCard, roomId, taskId }) => {
+    socket.on("estimate", async ({ pickedCard, roomId, taskId, userId }) => {
       console.log("Received estimate event:", pickedCard, roomId, taskId);
       try {
-        const project = await prisma.estimate.create({
+        const estimate = await prisma.estimate.create({
           data: {
             card: pickedCard,
             taskID: taskId,
+            userID: userId,
+            Task: {
+              connect: {
+                id: taskId,
+              },
+            },
+            User: {
+              connect: {
+                id: userId,
+              },
+            },
           },
         });
 

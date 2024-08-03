@@ -21,16 +21,18 @@ export default function Home() {
   };
 
   const handleCreateRoom = async (formData: FormData) => {
-    const roomId = await createRoom(formData);
+    const { roomId, userId } = await createRoom(formData);
     sessionStorage.setItem("userRole", "admin");
     sessionStorage.setItem("userName", formData.get("nameAdmin") as string);
+    sessionStorage.setItem("userId", userId);
     router.push(`/room/${roomId}`);
   };
 
   const handleJoinRoom = async (formData: FormData) => {
-    const roomId = await joinRoom(formData);
+    const { roomId, userId } = await joinRoom(formData);
     sessionStorage.setItem("userRole", "guest");
     sessionStorage.setItem("userName", formData.get("nameGuest") as string);
+    sessionStorage.setItem("userId", userId);
     router.push(`/room/${roomId}`);
   };
 

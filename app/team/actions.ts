@@ -25,7 +25,9 @@ export async function createRoom(formData: FormData) {
     },
   });
 
-  return room.id;
+  const adminUser = room.users[0];
+
+  return { roomId: room.id, userId: adminUser.id };
 }
 
 export async function joinRoom(formData: FormData) {
@@ -52,5 +54,5 @@ export async function joinRoom(formData: FormData) {
     },
   });
 
-  return room.id;
+  return { roomId, userId: user.id };
 }

@@ -8,6 +8,7 @@ import { CardData } from "./CardSets";
 
 interface AdminInterfaceProps {
   roomId: string;
+  userId: string | null;
   roomName: string;
   nameAdmin: string | null;
   users: User[];
@@ -21,6 +22,7 @@ interface AdminInterfaceProps {
 
 const AdminInterface = ({
   roomId,
+  userId,
   roomName,
   nameAdmin,
   users,

@@ -7,6 +7,7 @@ import { CardData } from "./CardSets";
 
 interface GuestInterfaceProps {
   roomId: string;
+  userId: string | null;
   nameGuest: string | null;
   roomName: string;
   users: User[];
@@ -28,6 +29,7 @@ interface SharedDescription {
 
 const GuestInterface = ({
   roomId,
+  userId,
   nameGuest,
   roomName,
   users,
@@ -61,11 +63,13 @@ const GuestInterface = ({
         roomId,
         pickedCard: selectedCard.figure,
         taskId: projectData?.taskId || sharedTaskId.current,
+        userId,
       });
       socket.emit("estimate", {
         roomId,
         pickedCard: selectedCard.figure,
         taskId: projectData?.taskId || sharedTaskId.current,
+        userId,
       });
     } else {
       console.error("No card selected");
