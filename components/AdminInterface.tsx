@@ -88,21 +88,39 @@ const AdminInterface = ({
   };
 
   const handleEstimate = () => {
-    if (selectedCard && sharedTaskId.current) {
+    if (selectedCard) {
       console.log("Emitting estimate event:", {
         roomId,
         pickedCard: selectedCard.figure,
-        taskId: sharedTaskId.current,
+        taskId: projectData?.taskId || sharedTaskId.current,
+        userId,
       });
       socket.emit("estimate", {
         roomId,
         pickedCard: selectedCard.figure,
-        taskId: sharedTaskId.current,
+        taskId: projectData?.taskId || sharedTaskId.current,
+        userId,
       });
     } else {
-      console.error("No card selected or taskId not available");
+      console.error("No card selected");
     }
   };
+
+  const aiEstimate = () => {
+    console.log("Emitting aiEstimate event:", {
+      roomId,
+      taskId: projectData?.taskId || sharedTaskId.current,
+      taskDescription,
+      projectDescription,
+    });
+    socket.emit("aiEstimate", {
+      roomId,
+      taskId: projectData?.taskId || sharedTaskId.current,
+      taskDescription,
+      projectDescription,
+    });
+  };
+
   return (
     <>
       <section className="roomBoard grid grid-cols-2fr-5fr-3fr items-start justify-items-stretch h-full min-h-screen">
@@ -121,12 +139,21 @@ const AdminInterface = ({
         </section>
 
         {isShared ? (
-          <ShareDescription
-            projectDescription={sharedProjectDescription}
-            taskDescription={sharedTaskDescription}
-            handleEstimate={handleEstimate}
-            onCardSelect={setSelectedCard}
-          />
+          <div className="grid grid-cols-1 justify-items-center">
+            <ShareDescription
+              projectDescription={sharedProjectDescription}
+              taskDescription={sharedTaskDescription}
+              handleEstimate={handleEstimate}
+              onCardSelect={setSelectedCard}
+            />
+            <button
+              type="button"
+              className="mt-6 text-2xl md:text-3xl font-bold ai_estimate_btn rounded-md p-3"
+              onClick={aiEstimate}
+            >
+              Ask AI
+            </button>
+          </div>
         ) : (
           <form
             onSubmit={(e) => {

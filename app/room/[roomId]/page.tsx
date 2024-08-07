@@ -65,9 +65,18 @@ const Room = ({ params }: RoomParams) => {
         setUsers(users);
       });
 
+      socket.on("estimate-shared", (updatedUser) => {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+          )
+        );
+      });
+
       return () => {
         socket.off("room-joined");
         socket.off("user-joined");
+        socket.off("estimate-shared");
       };
     }
   }, [socket, isConnected, roomId]);

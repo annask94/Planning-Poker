@@ -60,7 +60,7 @@ model Estimate {
 
 model AIEstimate {
   id String @id @default(cuid())
-  card Int
+  card String
   description String
   Task Task @relation(fields:[taskID], references: [id])
   taskID String @unique

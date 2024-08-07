@@ -41,10 +41,15 @@ h2 {
 
 .btn_component {
   background-color: var(--btn-bg-color);
+  margin: 0;
 }
 
 .btn_component_blue {
   background-color: var(--color-header-footer);
+}
+
+.btn_max_width {
+  max-width: 40%;
 }
 
 .card_button {
@@ -88,11 +93,27 @@ h2 {
 
 .members_list {
   background-color: var(--color-members-bg);
-  padding-top: 10%;
-  padding-bottom: 10%;
+  padding-top: 5%;
+  padding-bottom: 5%;
 }
 
 .member_card {
-  width: 80%;
+  width: 90%;
   box-shadow: 10px 10px 20px rgba(13, 39, 80, 0.16);
+}
+
+.member_ready {
+  background-color: var(--btn-bg-color);
+}
+
+.ai_estimate_btn {
+  width: 40%;
+  color: var(--color-header-footer);
+  border: 3px solid var(--color-header-footer);
+}
+
+.ai_estimate_btn:hover {
+  background-color: var(--color-header-footer);
+  color: white;
+  border: none;
 }

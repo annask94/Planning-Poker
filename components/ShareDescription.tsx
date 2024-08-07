@@ -16,7 +16,7 @@ const ShareDescription = ({
   onCardSelect,
 }: ShareDescriptionProps) => {
   return (
-    <div className="flex flex-col md:gap-6 gap-2 mt-4 mb-4 justify-start items-center h-full text-center">
+    <div className="flex flex-col md:gap-6 gap-2 mt-4 mb-4 justify-center items-center h-full text-center">
       <h2>Project description</h2>
       <p className="px-4">{projectDescription}</p>
       <h2>Task description</h2>
@@ -29,7 +29,11 @@ const ShareDescription = ({
         className="flex flex-col md:gap-6 gap-2 mt-4 mb-4"
       >
         <CardSet onCardSelect={onCardSelect} />
-        <CustomBtn text="Estimate" type="submit" />
+        <CustomBtn
+          text="Estimate"
+          type="submit"
+          className="btn_max_width self-center"
+        />
       </form>
     </div>
   );
