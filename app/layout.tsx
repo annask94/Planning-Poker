@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
 import Link from "next/link";
+import { Toaster, toast } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
               <h3 className="text-white text-2xl font-bold">AgileVote</h3>
             </Link>
           </header>
+          <Toaster richColors position="top-center" />
           <main>{children}</main>
           <footer className="header_footer_component p-2">
             <a

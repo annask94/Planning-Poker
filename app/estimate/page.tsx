@@ -58,7 +58,7 @@ export default function Home() {
           name="prompt"
           rows={5}
           cols={50}
-          placeholder="Use max 150 words. Be clear and specific, include key details, describe goals and challenges, use actionable language, and provide context if needed..."
+          placeholder="Use max 300 characters. Be clear and specific, include key details, describe goals and challenges, use actionable language, and provide context if needed..."
           className="task_description rounded-md border-2 border-gray-300 outline-none p-2
              w-full md:w-[80vw] h-[40vh] md:h-[30vh]"
         />

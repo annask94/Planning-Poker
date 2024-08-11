@@ -77,7 +77,7 @@ const GuestInterface = ({
   };
 
   return (
-    <section className="roomBoard grid grid-cols-2fr-5fr-3fr gap-4 items-start justify-items-stretch min-h-screen w-full">
+    <section className="roomBoard grid grid-cols-1fr-5fr-3fr gap-4 items-start justify-items-stretch min-h-screen w-full">
       <section className="flex flex-col gap-4 p-4 items-center justify-start min-h-full btn_component_blue text-white">
         <h2>Hi {nameGuest}!</h2>
         <p>Today you are the Guest!</p>

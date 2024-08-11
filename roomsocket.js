@@ -202,16 +202,24 @@ app.prepare().then(() => {
               where: { taskID: taskId },
               include: {
                 User: true,
-                aIEstimate: true,
               },
             });
 
             console.log("Users estimates:", allEstimates);
 
             console.log("AiEstimate received:", aiCard, aiDescription);
+
+            const allEstimatesTransform = allEstimates.map((estimate) => ({
+              card: estimate.card,
+              userName: estimate.User.name,
+            }));
+
+            console.log("Users estimates transformed:", allEstimatesTransform);
+
             io.to(roomId).emit("aiEstimate-received", {
               aiCard,
               aiDescription,
+              allEstimatesTransform,
             });
           } else {
             console.error("No valid response from AI.");

@@ -12,7 +12,7 @@
 }
 :root {
   --color-header-footer: rgb(52, 152, 219);
-  --color-members-bg: rgb(192, 230, 255);
+  --color-members-bg: rgb(246, 246, 246);
   --btn-bg-color: rgb(230, 126, 34);
   --card-hover-light-orange: rgb(255, 246, 238);
   --text-color: rgb(18, 53, 77);
@@ -103,7 +103,15 @@ h2 {
 }
 
 .member_ready {
+  background-color: var(--color-header-footer);
+}
+
+.team_title {
   background-color: var(--btn-bg-color);
+  color: white;
+  width: 80%;
+  text-align: center;
+  border-radius: 10px;
 }
 
 .ai_estimate_btn {
@@ -116,4 +124,23 @@ h2 {
   background-color: var(--color-header-footer);
   color: white;
   border: none;
+}
+
+.copy_btn {
+  color: var(--color-header-footer);
+}
+
+.copy_btn:hover {
+  background-color: var(--btn-bg-color);
+  color: white;
+}
+
+.menu_btn {
+  text-align: left;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.menu_btn:hover {
+  border-bottom: 2px solid white;
 }

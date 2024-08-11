@@ -15,7 +15,7 @@ const config: Config = {
       },
       gridTemplateColumns: {
         "2fr-1fr": "2fr 1fr",
-        "2fr-5fr-3fr": "2fr 5fr 3fr",
+        "1fr-5fr-3fr": "15% 2fr 1fr",
         "3fr-1fr": "3fr 1fr",
         "1fr-1fr": "1fr 1fr",
       },

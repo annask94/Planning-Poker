@@ -36,7 +36,7 @@ const MembersList = ({ users }: MemberListProps) => {
 
   return (
     <section className="flex flex-col mt-6 items-center">
-      <h2>Team</h2>
+      <h2 className="team_title">Team</h2>
       <div className="grid grid-cols-1 gap-4 mt-4 justify-items-center items-center members_list rounded-2xl overflow-y-auto max-h-[90vh] w-[25vw]">
         {users.map((user, index) => (
           <MemberCard

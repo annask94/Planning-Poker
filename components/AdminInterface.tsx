@@ -1,10 +1,13 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { Toaster, toast } from "sonner";
+import "react-toastify/dist/ReactToastify.css";
 import MembersList from "@/components/MembersList";
 import CustomBtn from "@/components/CustomBtn";
 import ShareDescription from "./ShareDescription";
 import { User } from "@prisma/client";
 import { CardData } from "./CardSets";
+import { APIKeyEnter } from "./APIKeyPopUp";
 
 interface AdminInterfaceProps {
   roomId: string;
@@ -35,14 +38,44 @@ const AdminInterface = ({
   const [sharedTaskDescription, setSharedTaskDescription] = useState("");
   const [isShared, setIsShared] = useState(false);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+  const [isClipboardSupported, setIsClipboardSupported] = useState(true);
+  const [showKeyPopup, setShowKeyPopup] = useState(false);
 
   const sharedTaskId = useRef<string | null>(null);
+
+  const hideAPIKeyPopUp = () => {
+    setShowKeyPopup(false);
+  };
+
+  const handleAPIEntry = (apiKey: string, aiModel: string) => {
+    console.log("Received API Key:", apiKey);
+    console.log("Selected AI Model:", aiModel);
+  };
 
   interface SharedDescription {
     projectDescription: string;
     taskDescription: string;
     taskId: string;
   }
+
+  useEffect(() => {
+    setIsClipboardSupported(!!navigator.clipboard);
+  }, []);
+
+  const copyToClipboard = async (roomId: string) => {
+    if (!navigator.clipboard) {
+      toast.error("Clipboard API not available");
+      setIsClipboardSupported(false);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(roomId);
+      toast.success("Room ID copied to clipboard!");
+    } catch (err) {
+      toast.error("Failed to copy!");
+      console.error("Failed to copy!", err);
+    }
+  };
 
   useEffect(() => {
     if (projectData) {
@@ -123,76 +156,108 @@ const AdminInterface = ({
 
   return (
     <>
-      <section className="roomBoard grid grid-cols-2fr-5fr-3fr items-start justify-items-stretch h-full min-h-screen">
-        <section className="flex flex-col gap-6 p-4 items-center justify-start min-h-full btn_component_blue text-white text-center">
-          <h2>Hi {nameAdmin}!</h2>
-          <p>Today you are the Admin!</p>
-          <p>You are in the {roomName} Room </p>
-          <p>{sharedTaskId.current}</p>
-          <div className="border border-white">
-            <p className="font-semibold">
-              Copy the room ID to invite other guests
-            </p>
-            <p>{roomId}</p>
+      <section className="roomBoard grid grid-cols-1fr-5fr-3fr items-start justify-items-stretch h-full min-h-screen">
+        <section className="flex flex-col gap-6 p-4 justify-start min-h-full btn_component_blue text-white">
+          <div className="grid grid-cols-1 gap-1 mb-10 text-center">
+            <h2>Hi {nameAdmin}!</h2>
+            <p>Today you are the Admin!</p>
+            <p>You are in the {roomName} Room </p>
           </div>
-          <button type="button">Leave room</button>
-        </section>
-
-        {isShared ? (
-          <div className="grid grid-cols-1 justify-items-center">
-            <ShareDescription
-              projectDescription={sharedProjectDescription}
-              taskDescription={sharedTaskDescription}
-              handleEstimate={handleEstimate}
-              onCardSelect={setSelectedCard}
-            />
+          <div className="grid grid-cols-1 gap-6 text-sm">
             <button
+              className="menu_btn"
               type="button"
-              className="mt-6 text-2xl md:text-3xl font-bold ai_estimate_btn rounded-md p-3"
-              onClick={aiEstimate}
+              onClick={() => copyToClipboard(roomId)}
             >
-              Ask AI
+              Copy the room ID
+            </button>
+            {!isClipboardSupported && <p>{roomId}</p>}
+            <button className="menu_btn" onClick={() => setShowKeyPopup(true)}>
+              Enter OpenAI API key
+            </button>
+            <button className="menu_btn" type="button">
+              Leave room
             </button>
           </div>
-        ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleShare();
-            }}
-            className="flex flex-col md:gap-6 gap-2 mt-4 mb-4 justify-center items-center"
-          >
-            <label htmlFor="projectDescription" className="text-l md:text-2xl">
-              Project description
-            </label>
-            <textarea
-              id="projectDescription"
-              name="projectDesc"
-              cols={30}
-              placeholder="Brief description of the project for better task complexity estimation. Use max 80 words."
-              className="task_description rounded-md border-2 border-gray-300 outline-none p-2
+        </section>
+
+        <section>
+          <p className="text-center italic p-4 text-sm">
+            Enter descriptions for projects and tasks, and share these with your
+            team for collaborative Scrum poker estimations.
+            <br /> Utilize the &#39;Ask AI&#39; feature to obtain AI-driven
+            effort estimations, which consider various project complexities and
+            risks.
+            <br /> You can customize AI responses by using your own API key and
+            choosing from different OpenAI models.
+            <br /> This setup aims to enhance estimation accuracy and streamline
+            project planning.
+          </p>
+          {isShared ? (
+            <div className="grid grid-cols-1 justify-items-center">
+              <ShareDescription
+                projectDescription={sharedProjectDescription}
+                taskDescription={sharedTaskDescription}
+                handleEstimate={handleEstimate}
+                onCardSelect={setSelectedCard}
+              />
+              <button
+                type="button"
+                className="mt-6 text-2xl md:text-3xl font-bold ai_estimate_btn rounded-md p-3"
+                onClick={aiEstimate}
+              >
+                Ask AI
+              </button>
+            </div>
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleShare();
+              }}
+              className="flex flex-col md:gap-6 gap-2 mt-4 mb-4 justify-center items-center"
+            >
+              <label
+                htmlFor="projectDescription"
+                className="text-l md:text-2xl"
+              >
+                Project description
+              </label>
+              <textarea
+                id="projectDescription"
+                name="projectDesc"
+                cols={30}
+                placeholder="Brief description of the project for better task complexity estimation. Use max 80 words."
+                className="task_description rounded-md border-2 border-gray-300 outline-none p-2
                   md:w-[40vw] h-[40vh] md:h-[20vh]"
-              value={projectDescription}
-              onChange={(e) => setProjectDescription(e.target.value)}
-            />
-            <label htmlFor="taskDescription" className="text-l md:text-2xl">
-              Describe the task
-            </label>
-            <textarea
-              id="taskDescription"
-              name="prompt"
-              cols={30}
-              placeholder="Use max 150 words. Be clear and specific, include key details, describe goals and challenges, use actionable language, and provide context if needed..."
-              className="task_description rounded-md border-2 border-gray-300 outline-none p-2
+                value={projectDescription}
+                onChange={(e) => setProjectDescription(e.target.value)}
+              />
+              <label htmlFor="taskDescription" className="text-l md:text-2xl">
+                Describe the task
+              </label>
+              <textarea
+                id="taskDescription"
+                name="prompt"
+                cols={30}
+                placeholder="Use max 150 words. Be clear and specific, include key details, describe goals and challenges, use actionable language, and provide context if needed..."
+                className="task_description rounded-md border-2 border-gray-300 outline-none p-2
                   md:w-[40vw] h-[40vh] md:h-[20vh]"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-            />
-            <CustomBtn type="submit" text="Share" />
-          </form>
-        )}
+                value={taskDescription}
+                onChange={(e) => setTaskDescription(e.target.value)}
+              />
+              <CustomBtn type="submit" text="Share" />
+            </form>
+          )}
+        </section>
         <MembersList users={users} />
       </section>
+      {showKeyPopup && (
+        <APIKeyEnter
+          closePopUp={hideAPIKeyPopUp}
+          handleAPIEntry={handleAPIEntry}
+        />
+      )}
     </>
   );
 };
