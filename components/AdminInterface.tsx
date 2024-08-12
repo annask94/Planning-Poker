@@ -203,7 +203,7 @@ const AdminInterface = ({
               />
               <button
                 type="button"
-                className="mt-6 text-2xl md:text-3xl font-bold ai_estimate_btn rounded-md p-3"
+                className="mt-6 mb-6 text-2xl md:text-3xl font-bold ai_estimate_btn rounded-md p-3"
                 onClick={aiEstimate}
               >
                 Ask AI
@@ -227,7 +227,7 @@ const AdminInterface = ({
                 id="projectDescription"
                 name="projectDesc"
                 cols={30}
-                placeholder="Brief description of the project for better task complexity estimation. Use max 80 words."
+                placeholder="Brief description of the project for better task complexity estimation. Use max 450 characters."
                 className="task_description rounded-md border-2 border-gray-300 outline-none p-2
                   md:w-[40vw] h-[40vh] md:h-[20vh]"
                 value={projectDescription}
@@ -240,7 +240,7 @@ const AdminInterface = ({
                 id="taskDescription"
                 name="prompt"
                 cols={30}
-                placeholder="Use max 150 words. Be clear and specific, include key details, describe goals and challenges, use actionable language, and provide context if needed..."
+                placeholder="Use max 300 characters. Be clear and specific, include key details, describe goals and challenges, use actionable language, and provide context if needed..."
                 className="task_description rounded-md border-2 border-gray-300 outline-none p-2
                   md:w-[40vw] h-[40vh] md:h-[20vh]"
                 value={taskDescription}

@@ -4,6 +4,7 @@ import MembersList from "@/components/MembersList";
 import { User } from "@prisma/client";
 import ShareDescription from "./ShareDescription";
 import { CardData } from "./CardSets";
+import AIEstimateShare from "./AIEstimateShare";
 
 interface GuestInterfaceProps {
   roomId: string;
@@ -27,6 +28,16 @@ interface SharedDescription {
   onCardSelect: () => void;
 }
 
+interface Estimates {
+  card: string;
+  userName: string;
+}
+interface AiSharedEstimate {
+  allEstimatesTransform: Estimates[];
+  aiCard: string;
+  aiDescription: string;
+}
+
 const GuestInterface = ({
   roomId,
   userId,
@@ -39,6 +50,10 @@ const GuestInterface = ({
   const [sharedProjectDescription, setSharedProjectDescription] = useState("");
   const [sharedTaskDescription, setSharedTaskDescription] = useState("");
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+  const [aiIsShared, setAiIsShared] = useState(false);
+  const [aiEstimateCard, setAiEstimateCard] = useState("");
+  const [aiEstimateDescription, setAiEstimateDescription] = useState("");
+  const [allEstimates, setAllEstimates] = useState<Estimates[] | null>(null);
 
   const sharedTaskId = useRef<string | null>(null);
 
@@ -52,8 +67,19 @@ const GuestInterface = ({
       }
     );
 
+    socket.on(
+      "aiEstimate-received",
+      ({ aiCard, aiDescription, allEstimatesTransform }: AiSharedEstimate) => {
+        setAiEstimateCard(aiCard);
+        setAiEstimateDescription(aiDescription);
+        setAllEstimates(allEstimatesTransform);
+        setAiIsShared(true);
+      }
+    );
+
     return () => {
       socket.off("project-shared");
+      socket.off("aiEstimate-received");
     };
   }, [socket]);
 
@@ -83,19 +109,38 @@ const GuestInterface = ({
         <p>Today you are the Guest!</p>
         <button type="button">Leave room</button>
       </section>
-      <div className="flex flex-col md:gap-8 gap-4 justify-center items-center mt-4">
-        <h2>Welcome to the {roomName} room!</h2>
+      <div className="flex flex-col md:gap-4 gap-4 justify-center items-center mt-4">
+        <h3 className="text-xl font-bold">Welcome to the {roomName} room!</h3>
         <p className="italic">You can view tasks and estimate.</p>
-        <ShareDescription
-          projectDescription={
-            projectData?.projectDescription || sharedProjectDescription
-          }
-          taskDescription={
-            projectData?.taskDescription || sharedTaskDescription
-          }
-          handleEstimate={handleEstimate}
-          onCardSelect={setSelectedCard}
-        />
+        {aiIsShared ? (
+          <AIEstimateShare
+            projectDescription={
+              projectData?.projectDescription || sharedProjectDescription
+            }
+            taskDescription={
+              projectData?.taskDescription || sharedTaskDescription
+            }
+            aiCard={aiEstimateCard}
+            aiDescription={aiEstimateDescription}
+          />
+        ) : (
+          // <div className="flex flex-col gap-6 p-4 justify-center items-center text-center">
+          //   <h2>AI picked</h2>
+          //   <p className="card_button font-bold">{aiEstimateCard}</p>
+          //   <h2>Details</h2>
+          //   <p>{aiEstimateDescription}</p>
+          // </div>
+          <ShareDescription
+            projectDescription={
+              projectData?.projectDescription || sharedProjectDescription
+            }
+            taskDescription={
+              projectData?.taskDescription || sharedTaskDescription
+            }
+            handleEstimate={handleEstimate}
+            onCardSelect={setSelectedCard}
+          />
+        )}
       </div>
       <MembersList users={users} />
     </section>

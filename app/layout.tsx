@@ -23,8 +23,8 @@ export default function RootLayout({
         <div className="container flex flex-col min-h-screen justify-between min-w-full">
           <header className="header_footer_component ">
             <Link href="/" className="flex justify-center items-center p-2">
-              <Image src="/logo.svg" alt="App logo" width={40} height={40} />
-              <h3 className="text-white text-2xl font-bold">AgileVote</h3>
+              <Image src="/logo.svg" alt="App logo" width={25} height={25} />
+              <p className="text-white text-lg font-bold ml-1">AgileVote</p>
             </Link>
           </header>
           <Toaster richColors position="top-center" />
@@ -36,8 +36,8 @@ export default function RootLayout({
             >
               <Image
                 src="\github.svg"
-                height={30}
-                width={30}
+                height={25}
+                width={25}
                 alt="Github logo"
               ></Image>
               <p className="text-white text-sm">Anna Sobieraj-Kmiecik</p>
