@@ -7,6 +7,7 @@ interface ShareDescriptionProps {
   taskDescription?: string;
   handleEstimate: () => void;
   onCardSelect: (card: CardData) => void;
+  disabled: boolean;
 }
 
 const ShareDescription = ({
@@ -14,6 +15,7 @@ const ShareDescription = ({
   taskDescription,
   handleEstimate,
   onCardSelect,
+  disabled,
 }: ShareDescriptionProps) => {
   return (
     <div className="flex flex-col md:gap-6 gap-2 mt-4 mb-4 justify-center items-center h-full text-center">
@@ -33,6 +35,7 @@ const ShareDescription = ({
           text="Estimate"
           type="submit"
           className="btn_max_width self-center"
+          disabled={disabled}
         />
       </form>
     </div>

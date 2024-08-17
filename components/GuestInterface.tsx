@@ -54,6 +54,7 @@ const GuestInterface = ({
   const [aiEstimateCard, setAiEstimateCard] = useState("");
   const [aiEstimateDescription, setAiEstimateDescription] = useState("");
   const [allEstimates, setAllEstimates] = useState<Estimates[] | null>(null);
+  const [isEstimateButtonDisabled, setEstimateButtonDisabled] = useState(false);
 
   const sharedTaskId = useRef<string | null>(null);
 
@@ -97,6 +98,7 @@ const GuestInterface = ({
         taskId: projectData?.taskId || sharedTaskId.current,
         userId,
       });
+      setEstimateButtonDisabled(true);
     } else {
       console.error("No card selected");
     }
@@ -124,12 +126,6 @@ const GuestInterface = ({
             aiDescription={aiEstimateDescription}
           />
         ) : (
-          // <div className="flex flex-col gap-6 p-4 justify-center items-center text-center">
-          //   <h2>AI picked</h2>
-          //   <p className="card_button font-bold">{aiEstimateCard}</p>
-          //   <h2>Details</h2>
-          //   <p>{aiEstimateDescription}</p>
-          // </div>
           <ShareDescription
             projectDescription={
               projectData?.projectDescription || sharedProjectDescription
@@ -139,6 +135,7 @@ const GuestInterface = ({
             }
             handleEstimate={handleEstimate}
             onCardSelect={setSelectedCard}
+            disabled={isEstimateButtonDisabled}
           />
         )}
       </div>

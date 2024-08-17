@@ -24,9 +24,11 @@ model User {
   role String 
   Room Room @relation(fields: [roomId], references: [id])
   roomId String
-  estimate Estimate?
+  estimate Estimate[]
   status  String @default("connected")
   ready String @default("picking")
+  currentCard String?
+  displayCard String @default("none")
 }
 
 model Project {

@@ -40,6 +40,7 @@ const AdminInterface = ({
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const [isClipboardSupported, setIsClipboardSupported] = useState(true);
   const [showKeyPopup, setShowKeyPopup] = useState(false);
+  const [isEstimateButtonDisabled, setEstimateButtonDisabled] = useState(false);
 
   const sharedTaskId = useRef<string | null>(null);
 
@@ -134,6 +135,7 @@ const AdminInterface = ({
         taskId: projectData?.taskId || sharedTaskId.current,
         userId,
       });
+      setEstimateButtonDisabled(true);
     } else {
       console.error("No card selected");
     }
@@ -200,6 +202,7 @@ const AdminInterface = ({
                 taskDescription={sharedTaskDescription}
                 handleEstimate={handleEstimate}
                 onCardSelect={setSelectedCard}
+                disabled={isEstimateButtonDisabled}
               />
               <button
                 type="button"

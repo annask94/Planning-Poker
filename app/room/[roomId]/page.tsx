@@ -73,6 +73,14 @@ const Room = ({ params }: RoomParams) => {
         );
       });
 
+      socket.on("aiEstimate-received", (updatedUser) => {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+          )
+        );
+      });
+
       return () => {
         socket.off("room-joined");
         socket.off("user-joined");

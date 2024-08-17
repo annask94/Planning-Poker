@@ -6,19 +6,31 @@ interface MemberCardProps {
   userName: string;
   userRole: string;
   ready: string;
+  pickedCard: string | null;
+  displayCard: string;
 }
-const MemberCard = ({ userName, userRole, ready }: MemberCardProps) => (
-  <div className="grid grid-cols-2 items-center bg-white p-4 member_card self-center rounded-xl">
+
+const MemberCard = ({
+  userName,
+  userRole,
+  ready,
+  pickedCard,
+  displayCard,
+}: MemberCardProps) => (
+  <div className="grid grid-cols-3 items-center bg-white p-4 member_card self-center rounded-xl">
     <div>
       <h2 className="text-lg">{userName}</h2>
       <p>{userRole}</p>
     </div>
-    <div
-      className={`member_ready rounded-lg ${
-        ready === "estimated" ? "opacity-100" : "opacity-50"
-      }`}
-    >
-      <h2 className="text-center text-white tracking-wider">READY</h2>
+    <div className={displayCard === "display" ? "opacity-100" : "opacity-0"}>
+      <h2 className="text-lg border-y-pink-400">{pickedCard}</h2>
+    </div>
+    <div className="member_circle">
+      <div
+        className={`member_ready ${
+          ready === "estimated" ? "opacity-100" : "opacity-0"
+        }`}
+      ></div>
     </div>
   </div>
 );
@@ -32,6 +44,8 @@ const MembersList = ({ users }: MemberListProps) => {
     userName: user.name,
     userRole: user.role,
     ready: user.ready,
+    pickedCard: user.currentCard,
+    displayCard: user.displayCard,
   }));
 
   return (
@@ -44,6 +58,8 @@ const MembersList = ({ users }: MemberListProps) => {
             userName={user.name}
             userRole={user.role}
             ready={user.ready}
+            pickedCard={user.currentCard}
+            displayCard={user.displayCard}
           />
         ))}
       </div>

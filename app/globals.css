@@ -44,6 +44,11 @@ h2 {
   margin: 0;
 }
 
+.btn_component:disabled {
+  background-color: slategrey;
+  cursor: not-allowed;
+}
+
 .btn_component_blue {
   background-color: var(--color-header-footer);
 }
@@ -102,8 +107,21 @@ h2 {
   box-shadow: 10px 10px 20px rgba(13, 39, 80, 0.16);
 }
 
+.member_circle {
+  border-radius: 50%;
+  border: 2px solid var(--color-header-footer);
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .member_ready {
   background-color: var(--color-header-footer);
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
 }
 
 .team_title {

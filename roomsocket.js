@@ -142,7 +142,7 @@ app.prepare().then(() => {
 
         const updatedUser = await prisma.user.update({
           where: { id: userId },
-          data: { ready: "estimated" },
+          data: { ready: "estimated", currentCard: pickedCard },
         });
 
         console.log("Estimate shared:", estimate.card, estimate.taskID);
@@ -198,28 +198,22 @@ app.prepare().then(() => {
               },
             });
 
-            const allEstimates = await prisma.estimate.findMany({
-              where: { taskID: taskId },
-              include: {
-                User: true,
-              },
+            const updatedUser = await prisma.user.updateMany({
+              where: { roomId: roomId },
+              data: { displayCard: "display" },
             });
 
-            console.log("Users estimates:", allEstimates);
-
-            console.log("AiEstimate received:", aiCard, aiDescription);
-
-            const allEstimatesTransform = allEstimates.map((estimate) => ({
-              card: estimate.card,
-              userName: estimate.User.name,
-            }));
-
-            console.log("Users estimates transformed:", allEstimatesTransform);
+            console.log(
+              "AiEstimate received:",
+              aiCard,
+              aiDescription,
+              updatedUser
+            );
 
             io.to(roomId).emit("aiEstimate-received", {
               aiCard,
               aiDescription,
-              allEstimatesTransform,
+              updatedUser,
             });
           } else {
             console.error("No valid response from AI.");
