@@ -17,6 +17,12 @@ The Scrum Poker Estimation Tool leverages advanced AI technology to automate and
 - **Tailwind CSS**: Used for rapid UI development, ensuring a mobile-responsive and visually appealing design.
 - **OpenAI GPT-3.5**: Integrated to harness cutting-edge AI for generating task difficulty estimations based on natural language descriptions.
 
+## Ongoing Development
+
+- **Virtual Team Room**: Currently developing a feature that enables a virtual room for teams, facilitating real-time collaboration during sprint planning.
+- **Real-Time Updates**: Implementing real-time updates using Socket.io, allowing for dynamic, instant communication and task adjustments during planning sessions.
+- **Database Integration**: Building a robust SQL database using Prisma and SQLite, providing persistent data storage and retrieval for enhanced task management.
+
 ## Learning Path
 
 - **React and Next.js**: Deepened understanding of modern web development frameworks and libraries, focusing on hooks for state management and Next.js APIs for server-side logic.
