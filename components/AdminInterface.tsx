@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MembersList from "@/components/MembersList";
 import CustomBtn from "@/components/CustomBtn";
 import ShareDescription from "./ShareDescription";
+import AIEstimateShare from "./AIEstimateShare";
 import { User } from "@prisma/client";
 import { CardData } from "./CardSets";
 import { APIKeyEnter } from "./APIKeyPopUp";
@@ -21,6 +22,11 @@ interface AdminInterfaceProps {
     taskDescription: string;
     taskId: string;
   } | null;
+}
+
+interface AiSharedEstimate {
+  aiCard: string;
+  aiDescription: string;
 }
 
 const AdminInterface = ({
@@ -40,6 +46,9 @@ const AdminInterface = ({
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const [isClipboardSupported, setIsClipboardSupported] = useState(true);
   const [showKeyPopup, setShowKeyPopup] = useState(false);
+  const [aiIsShared, setAiIsShared] = useState(false);
+  const [aiEstimateCard, setAiEstimateCard] = useState("");
+  const [aiEstimateDescription, setAiEstimateDescription] = useState("");
   const [isEstimateButtonDisabled, setEstimateButtonDisabled] = useState(false);
 
   const sharedTaskId = useRef<string | null>(null);
@@ -102,8 +111,18 @@ const AdminInterface = ({
       }
     );
 
+    socket.on(
+      "aiEstimate-received",
+      ({ aiCard, aiDescription }: AiSharedEstimate) => {
+        setAiEstimateCard(aiCard);
+        setAiEstimateDescription(aiDescription);
+        setAiIsShared(true);
+      }
+    );
+
     return () => {
       socket.off("project-shared");
+      socket.off("aiEstimate-received");
     };
   }, [socket, projectData]);
 
@@ -183,8 +202,8 @@ const AdminInterface = ({
           </div>
         </section>
 
-        <section>
-          <p className="text-center italic p-4 text-sm">
+        <section className="p-8 m-4">
+          <p className="text-center italic text-sm">
             Enter descriptions for projects and tasks, and share these with your
             team for collaborative Scrum poker estimations.
             <br /> Utilize the &#39;Ask AI&#39; feature to obtain AI-driven
@@ -195,7 +214,25 @@ const AdminInterface = ({
             <br /> This setup aims to enhance estimation accuracy and streamline
             project planning.
           </p>
-          {isShared ? (
+          {aiIsShared ? (
+            <div>
+              <AIEstimateShare
+                projectDescription={
+                  projectData?.projectDescription || sharedProjectDescription
+                }
+                taskDescription={
+                  projectData?.taskDescription || sharedTaskDescription
+                }
+                aiCard={aiEstimateCard}
+                aiDescription={aiEstimateDescription}
+              />
+              <div className="flex justify-between mt-8 mb-4">
+                <CustomBtn text="New Task" type="button" />
+                <CustomBtn text="New Project" type="button" />
+                <CustomBtn text="Close room" type="button" />
+              </div>
+            </div>
+          ) : isShared ? (
             <div className="grid grid-cols-1 justify-items-center">
               <ShareDescription
                 projectDescription={sharedProjectDescription}

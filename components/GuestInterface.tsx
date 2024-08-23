@@ -33,7 +33,6 @@ interface Estimates {
   userName: string;
 }
 interface AiSharedEstimate {
-  allEstimatesTransform: Estimates[];
   aiCard: string;
   aiDescription: string;
 }
@@ -53,7 +52,6 @@ const GuestInterface = ({
   const [aiIsShared, setAiIsShared] = useState(false);
   const [aiEstimateCard, setAiEstimateCard] = useState("");
   const [aiEstimateDescription, setAiEstimateDescription] = useState("");
-  const [allEstimates, setAllEstimates] = useState<Estimates[] | null>(null);
   const [isEstimateButtonDisabled, setEstimateButtonDisabled] = useState(false);
 
   const sharedTaskId = useRef<string | null>(null);
@@ -70,10 +68,9 @@ const GuestInterface = ({
 
     socket.on(
       "aiEstimate-received",
-      ({ aiCard, aiDescription, allEstimatesTransform }: AiSharedEstimate) => {
+      ({ aiCard, aiDescription }: AiSharedEstimate) => {
         setAiEstimateCard(aiCard);
         setAiEstimateDescription(aiDescription);
-        setAllEstimates(allEstimatesTransform);
         setAiIsShared(true);
       }
     );

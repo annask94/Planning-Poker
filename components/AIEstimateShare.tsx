@@ -17,7 +17,7 @@ const AIEstimateShare = ({
       <p>{projectDescription}</p>
       <h2>Estimated task</h2>
       <p>{taskDescription}</p>
-      <h2>AI picked</h2>
+      <h2 className="text-3xl font-bold mt-8">AI picked</h2>
       <p className="card_button font-bold">{aiCard}</p>
       <h2>Details</h2>
       <p>{aiDescription}</p>

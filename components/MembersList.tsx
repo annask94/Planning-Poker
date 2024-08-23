@@ -23,7 +23,7 @@ const MemberCard = ({
       <p>{userRole}</p>
     </div>
     <div className={displayCard === "display" ? "opacity-100" : "opacity-0"}>
-      <h2 className="text-lg border-y-pink-400">{pickedCard}</h2>
+      <h2 className="text-lg card_button">{pickedCard}</h2>
     </div>
     <div className="member_circle">
       <div
@@ -52,14 +52,14 @@ const MembersList = ({ users }: MemberListProps) => {
     <section className="flex flex-col mt-6 items-center">
       <h2 className="team_title">Team</h2>
       <div className="grid grid-cols-1 gap-4 mt-4 justify-items-center items-center members_list rounded-2xl overflow-y-auto max-h-[90vh] w-[25vw]">
-        {users.map((user, index) => (
+        {usersData.map((userData, index) => (
           <MemberCard
             key={index}
-            userName={user.name}
-            userRole={user.role}
-            ready={user.ready}
-            pickedCard={user.currentCard}
-            displayCard={user.displayCard}
+            userName={userData.userName}
+            userRole={userData.userRole}
+            ready={userData.ready}
+            pickedCard={userData.pickedCard}
+            displayCard={userData.displayCard}
           />
         ))}
       </div>

@@ -141,7 +141,7 @@ h2 {
 .ai_estimate_btn:hover {
   background-color: var(--color-header-footer);
   color: white;
-  border: none;
+  border: white;
 }
 
 .copy_btn {

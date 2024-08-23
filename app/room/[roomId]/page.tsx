@@ -74,17 +74,20 @@ const Room = ({ params }: RoomParams) => {
       });
 
       socket.on("aiEstimate-received", (updatedUser) => {
+        console.log("users updating");
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
             user.id === updatedUser.id ? { ...user, ...updatedUser } : user
           )
         );
+        console.log("users updated");
       });
 
       return () => {
         socket.off("room-joined");
         socket.off("user-joined");
         socket.off("estimate-shared");
+        socket.off("aiEstimate-received");
       };
     }
   }, [socket, isConnected, roomId]);

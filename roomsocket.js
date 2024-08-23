@@ -158,6 +158,12 @@ app.prepare().then(() => {
       async ({ roomId, taskId, taskDescription, projectDescription }) => {
         console.log("Received estimate event:", taskId);
 
+        const updatedUser = await prisma.user.updateMany({
+          where: { roomId: roomId },
+          data: { displayCard: "display" },
+        });
+        console.log(updatedUser);
+
         const openai = new OpenAI({
           apiKey: process.env.OPENAI_KEY,
         });
@@ -196,11 +202,6 @@ app.prepare().then(() => {
                   },
                 },
               },
-            });
-
-            const updatedUser = await prisma.user.updateMany({
-              where: { roomId: roomId },
-              data: { displayCard: "display" },
             });
 
             console.log(
