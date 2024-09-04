@@ -3,8 +3,8 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <div className="main_content grid grid-cols- 1 gap-16 max-w-5xl items-center mx-6 md:grid-cols-2 md:mx-auto">
-      <section className="main_text flex flex-col mt-12 md:block">
+    <div className="main_content grid grid-cols-1 gap-16 max-w-5xl items-center mx-6 md:grid-cols-2 md:mx-auto">
+      <section className="main_text flex flex-col mt-12 items-center md:items-start">
         <h1 className="text-2xl font-medium mb-4 text-center md:text-left md:mb-12 md:text-5xl">
           Planning Poker with the help of AI
         </h1>
@@ -12,12 +12,9 @@ const Hero = () => {
           Enter task details, choose your estimate card, and with a click,
           receive not just your estimation but also an AI-backed analysis.
         </p>
-        <Link
-          href="
-        ./estimate"
-        >
+        <Link href="./estimate">
           <button
-            className="btn_component text-xl md:text-2xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70"
+            className="btn_component text-xl px-14 py-1 rounded-md font-medium text-white hover:opacity-70 flex justify-center items-center md:text-2xl"
             type="button"
           >
             Start

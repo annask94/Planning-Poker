@@ -3,7 +3,7 @@ import { z } from "zod";
 const meaningfulText = z
   .string()
   .min(1, "Task description must be at least 1 character long.")
-  .max(150, "Task description cannot exceed 150 characters.")
+  .max(300, "Task description cannot exceed 300 characters.")
   .refine(
     (value) => {
       const wordPattern = /\b\w+\b/g;
