@@ -25,7 +25,6 @@ export default function RootLayout({
               <Image src="/logo.svg" alt="App logo" width={25} height={25} />
               <p className="text-white text-lg font-bold ml-1">AgileVote</p>
             </Link>
-            <h3 className="text-white text-2xl font-bold">AgileVote</h3>
           </header>
           <main>{children}</main>
           <footer className="header_footer_component p-2">
