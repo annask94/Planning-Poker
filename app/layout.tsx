@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 import Image from "next/image";
 import "./globals.css";
 
@@ -20,7 +21,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="container flex flex-col min-h-screen justify-between min-w-full">
           <header className="header_footer_component flex justify-center items-center p-2">
-            <Image src="/logo.svg" alt="App logo" width={40} height={40} />
+            <Link href="/" className="flex justify-center items-center p-2">
+              <Image src="/logo.svg" alt="App logo" width={25} height={25} />
+              <p className="text-white text-lg font-bold ml-1">AgileVote</p>
+            </Link>
             <h3 className="text-white text-2xl font-bold">AgileVote</h3>
           </header>
           <main>{children}</main>
@@ -31,8 +35,8 @@ export default function RootLayout({
             >
               <Image
                 src="\github.svg"
-                height={30}
-                width={30}
+                height={25}
+                width={25}
                 alt="Github logo"
               ></Image>
               <p className="text-white text-sm">Anna Sobieraj-Kmiecik</p>
